@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative 'options'
+require 'kodi_client/options'
 
 module KodiClient
   # Offers methods like connect, auth and tls to be chained together

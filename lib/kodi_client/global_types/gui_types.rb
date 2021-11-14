@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require_relative 'global_types'
-require_relative '../util/comparable'
-require_relative '../util/iterable'
+require 'kodi_client/global_types/global_types'
+require 'kodi_client/util/comparable'
+require 'kodi_client/util/iterable'
 
 module KodiClient
   module Types

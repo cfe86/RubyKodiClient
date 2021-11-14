@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require_relative '../util/comparable'
-require_relative 'video_types'
-require_relative 'audio_types'
+require 'kodi_client/util/comparable'
+require 'kodi_client/global_types/video_types'
+require 'kodi_client/global_types/audio_types'
 
 module KodiClient
   module Types

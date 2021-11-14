@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative '../util/iterable'
+require 'kodi_client/util/iterable'
 
 module KodiClient
   module Types

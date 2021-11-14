@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'http'
-require_relative '../kodi_client/util/comparable'
+require 'kodi_client/util/comparable'
 
 module KodiClient
 

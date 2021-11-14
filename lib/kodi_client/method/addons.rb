@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require_relative '../kodi_module'
-require_relative '../global_types/addon_types'
-require_relative '../global_types/list_types'
+require 'kodi_client/kodi_module'
+require 'kodi_client/global_types/addon_types'
+require 'kodi_client/global_types/list_types'
 
 module KodiClient
   module Modules

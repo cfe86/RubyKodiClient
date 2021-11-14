@@ -3,11 +3,11 @@
 require 'http'
 require 'json'
 
-require_relative 'kodi_client/Chainable'
-require_relative 'kodi_client/method/addons'
-require_relative 'kodi_client/method/application'
-require_relative 'kodi_client/method/gui'
-require_relative 'kodi_client/method/player'
+require 'kodi_client/Chainable'
+require 'kodi_client/method/addons'
+require 'kodi_client/method/application'
+require 'kodi_client/method/gui'
+require 'kodi_client/method/player'
 
 
 # client for Kodi rest api https://kodi.wiki/view/JSON-RPC_API/v12

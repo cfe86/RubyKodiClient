@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require_relative 'item_types'
-require_relative '../util/comparable'
+require 'kodi_client/global_types/item_types'
+require 'kodi_client/util/comparable'
 
 module KodiClient
   module Types

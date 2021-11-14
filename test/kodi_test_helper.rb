@@ -1,16 +1,17 @@
 # frozen_string_literal: true
 
-require_relative '../lib/kodi_client/method/application'
-require_relative '../lib/kodi_client/method/addons'
-require_relative '../lib/kodi_client/method/gui'
-require_relative '../lib/kodi_client/method/player'
-require_relative '../lib/kodi_client/global_types/global_types'
-require_relative '../lib/kodi_client/global_types/application_types'
-require_relative '../lib/kodi_client/global_types/addon_types'
-require_relative '../lib/kodi_client/global_types/gui_types'
-require_relative '../lib/kodi_client/global_types/item_types'
-require_relative '../lib/kodi_client/global_types/list_types'
-require_relative '../lib/kodi_client/options'
+require 'kodi_client/method/application'
+require 'kodi_client/method/addons'
+require 'kodi_client/method/gui'
+require 'kodi_client/method/player'
+
+require 'kodi_client/global_types/global_types'
+require 'kodi_client/global_types/application_types'
+require 'kodi_client/global_types/addon_types'
+require 'kodi_client/global_types/gui_types'
+require 'kodi_client/global_types/item_types'
+require 'kodi_client/global_types/list_types'
+require 'kodi_client/options'
 
 module KodiClient
   module Test
@@ -22,7 +23,7 @@ module KodiClient
         @post = post
       end
 
-      def post(arg1, arg2)
+      def post(_, arg2)
         actual_json = arg2[:json]
         expected_json = JSON.parse(@post)
 
