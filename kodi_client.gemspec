@@ -6,13 +6,11 @@ Gem::Specification.new do |spec|
   spec.authors       = ['Christian Feier']
   spec.email         = ['christian.feier@gmail.com']
 
-  spec.summary       = 'Write a short summary, because RubyGems requires one.'
-  spec.description   = 'Write a longer description or delete this line.'
+  spec.summary       = 'A work-in-progress client for Kodi JSON API v2.'
+  spec.description   = 'A client for the Kodi JSON API v12, currently implemented methods are addons, application, gui and player (more will be added with the time). For more information how to use it and how to activate Remote Control in Kodi, please check the github page https://github.com/cfe86/RubyKodiClient'
   spec.homepage      = 'https://github.com/cfe86/RubyKodiClient'
   spec.license       = 'MIT'
   spec.required_ruby_version = '>= 2.5.0'
-
-  spec.metadata['allowed_push_host'] = "Set to 'https://mygemserver.com'"
 
   spec.metadata['homepage_uri'] = 'https://github.com/cfe86/RubyKodiClient'
   spec.metadata['source_code_uri'] = 'https://github.com/cfe86/RubyKodiClient'

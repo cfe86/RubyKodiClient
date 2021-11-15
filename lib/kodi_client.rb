@@ -35,14 +35,3 @@ module KodiClient
     end
   end
 end
-
-
-client = KodiClient.connect('10.88.111.7', 8080).auth('kodi', 'pw')
-a = client.player
-# a.player_open('http://10.88.111.7:1238/%25/2734c6a5037a2c2cafb3b3c184e1ee6f/Breaking%2520Bad%2520-%2520S01E01%2520-%2520Pilot.mkv')
-a.player_open('C:\Users\Chris\Downloads\bla\Breaking Bad - S01E01 - Pilot.mkv')
-c = a.get_view_mode
-puts c
-# a = KodiClient.connect('10.88.111.7', 8080).auth('kodi', 'pw')
-# b = a.application
-# b.quit

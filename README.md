@@ -9,16 +9,17 @@ Currently implemented are the following Methods:
 * Player
 
 ## Installation
+from [rubygems](https://rubygems.org/gems/kodi_client) using
+```ruby
+gem install kodi-client
+```
+or from the sources using
 ```ruby
 gem build kodi-client.gemspec
 ```
 and then execute
 ```ruby
 gem build kodi-client-0.4.0.gemspec
-```
-Or from [rubygems](TODO) using
-```ruby
-gem install kodi-client
 ```
 
 ## Enable Kodi Remote Control
