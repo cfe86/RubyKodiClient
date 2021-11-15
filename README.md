@@ -10,15 +10,15 @@ Currently implemented are the following Methods:
 
 ## Installation
 from [rubygems](https://rubygems.org/gems/kodi_client) using
-```ruby
+```shell
 gem install kodi-client
 ```
 or from the sources using
-```ruby
+```shell
 gem build kodi-client.gemspec
 ```
 and then execute
-```ruby
+```shell
 gem build kodi-client-0.4.0.gemspec
 ```
 
