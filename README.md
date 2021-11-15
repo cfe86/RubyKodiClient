@@ -1,38 +1,83 @@
-# KodiClient
+# RubyKodiClient
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/kodi_client`. To experiment with that code, run `bin/console` for an interactive prompt.
+RubyKodiClient is a work-in-progress client for [Kodi JSON API v12](https://kodi.wiki/view/JSON-RPC_API/v12) written in ruby.
 
-TODO: Delete this and the text above, and describe your gem
+Currently implemented are the following Methods:
+* Addons
+* Application
+* GUI
+* Player
 
 ## Installation
-
-Add this line to your application's Gemfile:
-
 ```ruby
-gem 'kodi_client'
+gem build kodi-client.gemspec
+```
+and then execute
+```ruby
+gem build kodi-client-0.4.0.gemspec
+```
+Or from [rubygems](TODO) using
+```ruby
+gem install kodi-client
 ```
 
-And then execute:
+## Enable Kodi Remote Control
+In order to use JKodi Wrapper, Kodi remote control must be enabled. To do so perform the following steps:
 
-    $ bundle install
+1.) Go to Settings
+![Settings](https://github.com/cf86/JKodiWrapper/blob/master/screenshots/Settings.png)
 
-Or install it yourself as:
+2.) Open the Services Menu
+![Service](https://github.com/cf86/JKodiWrapper/blob/master/screenshots/Service.png)
 
-    $ gem install kodi_client
+3.) Select the Control Tab
+![Control](https://github.com/cf86/JKodiWrapper/blob/master/screenshots/Control.png)
+
+4.) Enable Remote control
+![Remote Access](https://github.com/cf86/JKodiWrapper/blob/master/screenshots/RemoteAccess.png)
 
 ## Usage
 
-TODO: Write usage instructions here
-
-## Development
-
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake test` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
-
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and the created tag, and push the `.gem` file to [rubygems.org](https://rubygems.org).
-
-## Contributing
-
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/kodi_client.
+To create a client you need at least the ip and port of the kodi server
+```ruby
+client = KodiClient.connect('127.0.0.1', 8080)
+```
+optional you can also provide authentication and if required, TLS 
+```ruby
+client = KodiClient.connect('127.0.0.1', 8080).auth('kodi', 'password').use_tls
+```
+once a client is created, all methods are available, e.g.
+```ruby
+client = KodiClient.connect('127.0.0.1', 8080).auth('kodi', 'password').use_tls
+application = client.application
+gui = client.gui
+```
+with the method aquired, all calls can be executed, for example to quit kodi
+```ruby
+client = KodiClient.connect('127.0.0.1', 8080).auth('kodi', 'password').use_tls
+application = client.application
+application.quit
+```
+or to play a movie
+```ruby
+client = KodiClient.connect('127.0.0.1', 8080).auth('kodi', 'password').use_tls
+player = client.player
+# the file can be a local path on the server, or e.g. an upnp file url
+player.player_open('path/to/file')
+```
+some calls just return a simple `OK` result, some also return some data, the full response is always returned
+in a `KodiResponse`, which contains any `error` and any `result` as specified in the documentation.
+```ruby
+client = KodiClient.connect('127.0.0.1', 8080).auth('kodi', 'password').use_tls
+player = client.player
+# the file can be a local path on the server, or e.g. an upnp file url
+player.player_open('path/to/file')
+# movie started, now we can seek (assuming it is player 1) to 50% of the movie
+response = player.seek(1, 50.0)
+# seek returns percentage, time and total time
+response.result.percentage # => 50.0
+response.result.time # => { 'hours' => 1, 'minutes' => 30, 'seconds' => 0}, 'milliseconds' => 0 }
+```
 
 ## License
 

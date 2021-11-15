@@ -40,6 +40,8 @@ module KodiClient
 
         NEXT = 'next'
         PREV = 'previous'
+        ON = 'on'
+        OFF = 'off'
       end
 
       # Global.IncrementDecrement https://kodi.wiki/view/JSON-RPC_API/v12#Global.IncrementDecrement

@@ -9,6 +9,14 @@ module KodiClient
   module Types
     module Player
 
+      # enum for in/out zoom
+      module Zoom
+        extend Iterable
+
+        IN = 'in'
+        OUT = 'out'
+      end
+
       # Player.ViewMode https://kodi.wiki/view/JSON-RPC_API/v12#Player.ViewMode
       module ViewMode
         extend Iterable
@@ -47,6 +55,26 @@ module KodiClient
         OFF = 'off'
         ONE = 'one'
         ALL = 'all'
+        CYCLE = 'cycle'
+      end
+
+      # player speed enum, -32 to 32
+      module PlayerSpeed
+        extend Iterable
+
+        MINUS_32 = -32
+        MINUS_16 = -16
+        MINUS_8 = -8
+        MINUS_4 = -4
+        MINUS_2 = -2
+        MINUS_1 = -1
+        NEUTRAL = 0
+        PLUS_1 = 1
+        PLUS_2 = 2
+        PLUS_4 = 4
+        PLUS_8 = 8
+        PLUS_16 = 16
+        PLUS_32 = 32
       end
 
       # player id and type
@@ -218,6 +246,49 @@ module KodiClient
           @vertical_shift = hash['verticalshift']
           @view_mode = hash['viewed']
           @zoom = hash['zoom']
+        end
+
+        def ==(other)
+          compare(self, other)
+        end
+      end
+
+      # Player.Position.Time https://kodi.wiki/view/JSON-RPC_API/v12#Player.Position.Time
+      class PlayerPositionTime
+        include Comparable
+
+        attr_reader :hours, :minutes, :seconds, :milliseconds
+
+        def initialize(hash)
+          @hours = hash['hours']
+          @minutes = hash['minutes']
+          @seconds = hash['seconds']
+          @milliseconds = hash['milliseconds']
+        end
+
+        def ==(other)
+          compare(self, other)
+        end
+      end
+
+      # defines  the jump size for seek
+      module SeekJump
+        include Iterable
+
+        SMALL_FORWARD = 'smallforward'
+        SMALL_BACKWARD = 'smallbackward'
+        BIG_FORWARD = 'bigforward'
+        BIG_BACKWARD = 'bigbackward'
+      end
+
+      # return value of Player.Seek
+      class SeekReturnValue
+        include Comparable
+
+        def initialize(hash)
+          @percentage = hash['percentage']
+          @time = Types::Global::GlobalTime.new(hash['time'])
+          @total_time = Types::Global::GlobalTime.new(hash['totaltime'])
         end
 
         def ==(other)

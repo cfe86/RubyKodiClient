@@ -21,6 +21,16 @@ module KodiClient
       MOVE = 'Player.Move'
       ROTATE = 'Player.Rotate'
       PLAY_PAUSE = 'Player.PlayPause'
+      SEEK = 'Player.Seek'
+      SET_AUDIO_STREAM = 'Player.SetAudioStream'
+      SET_PARTY_MODE = 'Player.SetPartymode'
+      SET_REPEAT = 'Player.SetRepeat'
+      SET_SPEED = 'Player.SetSpeed'
+      SET_SUBTITLE = 'Player.SetSubtitle'
+      SET_VIDEO_STREAM = 'Player.SetVideoStream'
+      SET_VIEW_MODE = 'Player.SetViewMode'
+      STOP = 'Player.Stop'
+      ZOOM = 'Player.Zoom'
 
       def add_subtitle(player_id, subtitle, kodi_id = 1)
         request = KodiRequest.new(kodi_id, ADD_SUBTITLE, { 'playerid' => player_id, 'subtitle' => subtitle })
@@ -107,6 +117,102 @@ module KodiClient
         json = invoke_api(request)
         result = json['result']['speed']
         json['result'] = result
+        KodiResponse.new(json)
+      end
+
+      # seeks to the given position
+      #
+      # @param [Integer] player_id - the player id
+      # @param [Float/PlayerPositionTime/PlayerSeekJump/Integer] value - the seek value in either Percentage,
+      #                                                                  PositionTime, Jump or seek by seconds
+      #
+      # return [KodiResponse] - return percentage, time and total time
+      def seek(player_id, value, kodi_id = 1)
+        request = KodiRequest.new(kodi_id, SEEK, { 'playerid' => player_id, 'value' => value })
+        json = invoke_api(request)
+        result = Types::Player::SeekReturnValue.new(json['result'])
+        json['result'] = result
+        KodiResponse.new(json)
+      end
+
+      # sets the given audio stream
+      #
+      # @param [Integer, Next/Prev] stream - the stream to set, can either be the index or next/prev
+      #
+      # return [KodiResponse] 'OK' or error
+      def set_audio_stream(player_id, stream, kodi_id = 1)
+        request = KodiRequest.new(kodi_id, SET_AUDIO_STREAM, { 'playerid' => player_id, 'stream' => stream })
+        json = invoke_api(request)
+        KodiResponse.new(json)
+      end
+
+      def set_party_mode(player_id, mode = Types::Global::Toggle::TOGGLE, kodi_id = 1)
+        request = KodiRequest.new(kodi_id, SET_PARTY_MODE, { 'playerid' => player_id, 'partymode' => mode })
+        json = invoke_api(request)
+        KodiResponse.new(json)
+      end
+
+      def set_repeat(player_id, repeat = Types::Player::PlayerRepeat::ALL, kodi_id = 1)
+        request = KodiRequest.new(kodi_id, SET_REPEAT, { 'playerid' => player_id, 'repeat' => repeat })
+        json = invoke_api(request)
+        KodiResponse.new(json)
+      end
+
+      def set_speed(player_id, speed = Types::Global::IncrementDecrement::INCREMENT, kodi_id = 1)
+        request = KodiRequest.new(kodi_id, SET_SPEED, { 'playerid' => player_id, 'speed' => speed })
+        json = invoke_api(request)
+        result = json['result']['speed']
+        json['result'] = result
+        KodiResponse.new(json)
+      end
+
+      # sets the subtitle
+      #
+      # @param [Integer] player_id - the player id
+      # @param [Next|Prev/Integer] subtitle - the subtitle to set. Can either be an index or next/prev
+      # @param [Boolean] enabled - true if the set subtitle should be enabled, else false
+      #
+      # @return [KodiResponse] - 'OK' else error
+      def set_subtitle(player_id, subtitle = Types::Global::NextPrev::NEXT, enabled = false, kodi_id = 1)
+        request = KodiRequest.new(kodi_id, SET_SUBTITLE, { 'playerid' => player_id, 'subtitle' => subtitle,
+                                                           'enabled' => enabled })
+        json = invoke_api(request)
+        KodiResponse.new(json)
+      end
+
+      # Sets the video stream
+      #
+      # @param [Integer] player_id - the player id
+      # @param [Next|Prev/Integer] stream - the stream to set. Can either be an index or next/prev
+      #
+      # @return [KodiResponse] - 'OK' else error
+      def set_video_stream(player_id, stream = Types::Global::NextPrev::NEXT, kodi_id = 1)
+        request = KodiRequest.new(kodi_id, SET_VIDEO_STREAM, { 'playerid' => player_id, 'stream' => stream })
+        json = invoke_api(request)
+        KodiResponse.new(json)
+      end
+
+      def set_view_mode(player_id, mode = Types::Player::ViewMode::NORMAL, kodi_id = 1)
+        request = KodiRequest.new(kodi_id, SET_VIEW_MODE, { 'playerid' => player_id, 'viewmode' => mode })
+        json = invoke_api(request)
+        KodiResponse.new(json)
+      end
+
+      def stop(player_id, kodi_id = 1)
+        request = KodiRequest.new(kodi_id, STOP, { 'playerid' => player_id })
+        json = invoke_api(request)
+        KodiResponse.new(json)
+      end
+
+      # Sets the zoom
+      #
+      # @param [Integer] player_id - the player id
+      # @param [Zoom/Integer] zoom - Can either be 1-10 or step In/Out
+      #
+      # @return [KodiResponse] - 'OK' else error
+      def zoom(player_id, zoom, kodi_id = 1)
+        request = KodiRequest.new(kodi_id, ZOOM, { 'playerid' => player_id, 'zoom' => zoom })
+        json = invoke_api(request)
         KodiResponse.new(json)
       end
     end

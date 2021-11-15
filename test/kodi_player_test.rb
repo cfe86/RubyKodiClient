@@ -175,6 +175,95 @@ module KodiClient
         expected = create_kodi_response(1, 1)
         assert_equal(expected, actual)
       end
+
+      def test_seek
+        post = '{"jsonrpc":"2.0","id":1,"method":"Player.Seek", "params": {"playerid": 1, "value": 56.11}}'
+        response = '{"id":1,"jsonrpc":"2.0","result":{"percentage":56.11011505126953125,"time":{"hours":1,'\
+                   '"milliseconds":1,"minutes":1,"seconds":1},"totaltime":{"hours":1,"milliseconds":672,'\
+                   '"minutes":48,"seconds":44}}}'
+        actual = run_test(Player, post, response, ->(mod) { mod.seek(1, 56.11) })
+        expected_result = { 'percentage' => 56.11011505126953125, 
+                            'time' => { 'hours' => 1, 'milliseconds' => 1, 'minutes' => 1, 'seconds' => 1},
+                            'totaltime' => { 'hours' => 1, 'milliseconds' => 672, 'minutes' => 48, 'seconds' => 44 } }
+        expected = create_kodi_response(1, Types::Player::SeekReturnValue.new(expected_result))
+        assert_equal(expected, actual)
+      end
+
+      def test_set_audio_stream
+        post = '{"jsonrpc":"2.0","id":1,"method":"Player.SetAudioStream", "params": {"playerid": 1, "stream": 1}}'
+        response = '{"id":1,"jsonrpc":"2.0","result": "OK"}'
+        actual = run_test(Player, post, response, ->(mod) { mod.set_audio_stream(1, 1) })
+        expected = create_kodi_response(1, 'OK')
+        assert_equal(expected, actual)
+      end
+
+      def test_set_party_mode
+        post = '{"jsonrpc":"2.0","id":1,"method":"Player.SetPartymode", "params": {"playerid": 1,'\
+               '"partymode": "toggle"}}'
+        response = '{"id":1,"jsonrpc":"2.0","result": "OK"}'
+        actual = run_test(Player, post, response, ->(mod) { mod.set_party_mode(1, Types::Global::Toggle::TOGGLE) })
+        expected = create_kodi_response(1, 'OK')
+        assert_equal(expected, actual)
+      end
+
+      def test_set_repeat
+        post = '{"jsonrpc":"2.0","id":1,"method":"Player.SetRepeat", "params": {"playerid": 1,'\
+               '"repeat": "all"}}'
+        response = '{"id":1,"jsonrpc":"2.0","result": "OK"}'
+        actual = run_test(Player, post, response, ->(mod) { mod.set_repeat(1, Types::Player::PlayerRepeat::ALL) })
+        expected = create_kodi_response(1, 'OK')
+        assert_equal(expected, actual)
+      end
+
+      def test_set_speed
+        post = '{"jsonrpc":"2.0","id":1,"method":"Player.SetSpeed", "params": {"playerid": 1,'\
+               '"speed": "increment"}}'
+        response = '{"id":1,"jsonrpc":"2.0","result": { "speed": 2}}'
+        actual = run_test(Player, post, response, ->(mod) { mod.set_speed(1, 'increment') })
+        expected = create_kodi_response(1, 2)
+        assert_equal(expected, actual)
+      end
+
+      def test_set_subtitle
+        post = '{"jsonrpc":"2.0","id":1,"method":"Player.SetSubtitle", "params": {"playerid": 1,'\
+               '"subtitle": "next", "enabled" : false}}'
+        response = '{"id":1,"jsonrpc":"2.0","result": "OK"}'
+        actual = run_test(Player, post, response, ->(mod) { mod.set_subtitle(1, 'next') })
+        expected = create_kodi_response(1, 'OK')
+        assert_equal(expected, actual)
+      end
+
+      def test_set_video_stream
+        post = '{"jsonrpc":"2.0","id":1,"method":"Player.SetVideoStream", "params": {"playerid": 1, "stream": 1}}'
+        response = '{"id":1,"jsonrpc":"2.0","result": "OK"}'
+        actual = run_test(Player, post, response, ->(mod) { mod.set_video_stream(1, 1) })
+        expected = create_kodi_response(1, 'OK')
+        assert_equal(expected, actual)
+      end
+
+      def test_set_view_mode
+        post = '{"jsonrpc":"2.0","id":1,"method":"Player.SetViewMode", "params": {"playerid": 1, "viewmode": "normal"}}'
+        response = '{"id":1,"jsonrpc":"2.0","result": "OK"}'
+        actual = run_test(Player, post, response, ->(mod) { mod.set_view_mode(1, Types::Player::ViewMode::NORMAL) })
+        expected = create_kodi_response(1, 'OK')
+        assert_equal(expected, actual)
+      end
+
+      def test_stop
+        post = '{"jsonrpc":"2.0","id":1,"method":"Player.Stop", "params": {"playerid": 1}}'
+        response = '{"id":1,"jsonrpc":"2.0","result": "OK"}'
+        actual = run_test(Player, post, response, ->(mod) { mod.stop(1) })
+        expected = create_kodi_response(1, 'OK')
+        assert_equal(expected, actual)
+      end
+
+      def test_zoom
+        post = '{"jsonrpc":"2.0","id":1,"method":"Player.Zoom", "params": {"playerid": 1, "zoom": 4}}'
+        response = '{"id":1,"jsonrpc":"2.0","result": "OK"}'
+        actual = run_test(Player, post, response, ->(mod) { mod.zoom(1, 4) })
+        expected = create_kodi_response(1, 'OK')
+        assert_equal(expected, actual)
+      end
     end
   end
 end
