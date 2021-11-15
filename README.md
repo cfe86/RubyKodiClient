@@ -19,7 +19,7 @@ gem build kodi-client.gemspec
 ```
 and then execute
 ```shell
-gem build kodi-client-0.4.0.gemspec
+gem build kodi-client-x.x.x.gemspec
 ```
 
 ## Enable Kodi Remote Control
