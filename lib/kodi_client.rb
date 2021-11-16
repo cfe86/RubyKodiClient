@@ -10,6 +10,7 @@ require 'kodi_client/method/favourites'
 require 'kodi_client/method/gui'
 require 'kodi_client/method/input'
 require 'kodi_client/method/player'
+require 'kodi_client/method/system'
 
 
 # client for Kodi rest api https://kodi.wiki/view/JSON-RPC_API/v12
