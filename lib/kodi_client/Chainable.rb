@@ -43,5 +43,7 @@ module KodiClient
       end
       @options
     end
+
+    private :def_client, :def_options, :merge_options
   end
 end
