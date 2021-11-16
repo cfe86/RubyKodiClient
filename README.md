@@ -5,7 +5,9 @@ RubyKodiClient is a work-in-progress client for [Kodi JSON API v12](https://kodi
 Currently implemented are the following Methods:
 * Addons
 * Application
+* Favourites
 * GUI
+* Input
 * Player
 
 ## Installation

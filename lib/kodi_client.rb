@@ -6,7 +6,9 @@ require 'json'
 require 'kodi_client/Chainable'
 require 'kodi_client/method/addons'
 require 'kodi_client/method/application'
+require 'kodi_client/method/favourites'
 require 'kodi_client/method/gui'
+require 'kodi_client/method/input'
 require 'kodi_client/method/player'
 
 
@@ -18,11 +20,12 @@ module KodiClient
   class Client
     include Chainable
 
-    attr_reader :addons, :application, :gui, :player, :input
+    attr_reader :addons, :application, :gui, :player, :input, :favourites
 
     def initialize
       @addons = KodiClient::Modules::Addons.new
       @application = KodiClient::Modules::Application.new
+      @favourites = KodiClient::Modules::Favourites.new
       @gui = KodiClient::Modules::GUI.new
       @input = KodiClient::Modules::Input.new
       @player = KodiClient::Modules::Player.new
@@ -34,6 +37,7 @@ module KodiClient
       @gui.apply_options(options)
       @input.apply_options(options)
       @player.apply_options(options)
+      @favourites.apply_options(options)
     end
   end
 end
