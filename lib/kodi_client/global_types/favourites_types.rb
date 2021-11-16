@@ -30,7 +30,7 @@ module KodiClient
       end
 
       # Favourite.Details.Favourite https://kodi.wiki/view/JSON-RPC_API/v12#Favourite.Details.Favourite
-      class Favourite
+      class DetailsFavourite
         include Comparable
 
         attr_reader :path, :thumbnail, :title, :type, :window, :window_parameter
@@ -56,7 +56,7 @@ module KodiClient
         attr_reader :favourites, :limits
 
         def initialize(hash)
-          @favourites = hash['favourites'].map { |it| Favourite.new(it) }
+          @favourites = hash['favourites'].map { |it| DetailsFavourite.new(it) }
           @limits = Types::List::ListLimitsReturned.new(hash['limits'])
         end
 

@@ -8,7 +8,7 @@ module KodiClient
 
       # Input.Action https://kodi.wiki/view/JSON-RPC_API/v12#Input.Action
       module InputAction
-        include Iterable
+        extend Iterable
 
         ANALOGFASTFORWARD = 'analogfastforward'
         ANALOGMOVE = 'analogmove'

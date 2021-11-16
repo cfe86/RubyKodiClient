@@ -18,7 +18,7 @@ module KodiClient
 
       # rotate for clockwise and counter clockwise
       module Rotate
-        include Iterable
+        extend Iterable
 
         CLOCKWISE = 'clockwise'
         COUNTER_CLOCKWISE = 'counterclockwise'
@@ -26,7 +26,7 @@ module KodiClient
 
       # direction for left, right, up, down
       module Direction
-        include Iterable
+        extend Iterable
 
         LEFT = 'left'
         RIGHT = 'right'
@@ -36,7 +36,7 @@ module KodiClient
 
       # enum for prev/next
       module NextPrev
-        include Iterable
+        extend Iterable
 
         NEXT = 'next'
         PREV = 'previous'
@@ -46,7 +46,7 @@ module KodiClient
 
       # Global.IncrementDecrement https://kodi.wiki/view/JSON-RPC_API/v12#Global.IncrementDecrement
       module IncrementDecrement
-        include Iterable
+        extend Iterable
 
         INCREMENT = 'increment'
         DECREMENT = 'decrement'
@@ -98,6 +98,14 @@ module KodiClient
         def ==(other)
           compare(self, other)
         end
+      end
+
+      # available Password Encryptions
+      module PasswordEncryption
+        extend Iterable
+
+        NONE = 'none'
+        MD5 = 'md5'
       end
     end
   end

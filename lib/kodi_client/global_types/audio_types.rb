@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'kodi_client/global_types/media_types'
-require 'kodi_client/global_types/player_type'
 require 'kodi_client/util/comparable'
 require 'kodi_client/util/iterable'
 

@@ -9,6 +9,7 @@ Currently implemented are the following Methods:
 * GUI
 * Input
 * Player
+* Profile
 * System
 
 ## Installation

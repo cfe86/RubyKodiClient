@@ -17,6 +17,7 @@ module KodiClient
       h = request.instance_variables.each_with_object({}) do |var, hash|
         hash[var.to_s.delete('@')] = request.instance_variable_get(var)
       end
+
       @http_client ||= build_client
       response = @http_client.post(@endpoint_url, json: h).to_s
       JSON.parse(response)
