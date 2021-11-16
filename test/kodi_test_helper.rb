@@ -6,6 +6,7 @@ require 'kodi_client/method/gui'
 require 'kodi_client/method/player'
 require 'kodi_client/method/input'
 require 'kodi_client/method/favourites'
+require 'kodi_client/method/system'
 
 require 'kodi_client/global_types/global_types'
 require 'kodi_client/global_types/application_types'

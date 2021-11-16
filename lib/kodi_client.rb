@@ -20,7 +20,7 @@ module KodiClient
   class Client
     include Chainable
 
-    attr_reader :addons, :application, :gui, :player, :input, :favourites
+    attr_reader :addons, :application, :gui, :player, :input, :favourites, :system
 
     def initialize
       @addons = KodiClient::Modules::Addons.new
@@ -29,6 +29,7 @@ module KodiClient
       @gui = KodiClient::Modules::GUI.new
       @input = KodiClient::Modules::Input.new
       @player = KodiClient::Modules::Player.new
+      @system = KodiClient::Modules::System.new
     end
 
     def apply_options(options)
@@ -38,6 +39,7 @@ module KodiClient
       @input.apply_options(options)
       @player.apply_options(options)
       @favourites.apply_options(options)
+      @system.apply_options(options)
     end
   end
 end

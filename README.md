@@ -9,6 +9,7 @@ Currently implemented are the following Methods:
 * GUI
 * Input
 * Player
+* System
 
 ## Installation
 from [rubygems](https://rubygems.org/gems/kodi_client) using
