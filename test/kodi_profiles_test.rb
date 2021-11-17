@@ -22,8 +22,8 @@ module KodiClient
                '"params": {"properties":["lockmode", "thumbnail"]}}'
         response = '{"id":1,"jsonrpc":"2.0","result":{"label":"Master user","lockmode":0,"thumbnail":"a thumbnail"}}'
         actual = run_test(Profiles, post, response, ->(mod) { mod.get_current_profile })
-        expected_entry = { 'label' => 'Master user', 'lockmode' => 0, 'thumbnail' => 'a thumbnail' }
-        expected = create_kodi_response(1, Types::Profiles::DetailsProfile.create(expected_entry))
+        expected_result = Types::Profiles::DetailsProfile.new(0, 'a thumbnail', 'Master user')
+        expected = create_kodi_response(1, expected_result)
         assert_equal(expected, actual)
       end
 
@@ -35,13 +35,10 @@ module KodiClient
                    '"profiles":[{"label":"Master user","lockmode":0,"thumbnail":"a thumbnail"},'\
                    '{"label":"Test","lockmode":0,"thumbnail":"image://path/to/thumb.jpg"}]}}'
         actual = run_test(Profiles, post, response, ->(mod) { mod.get_profiles })
-        expected_limits = { 'end' => 2, 'start' => 0, 'total' => 2 }
-        expected_entry1 = { 'label' => 'Master user', 'lockmode' => 0, 'thumbnail' => 'a thumbnail' }
-        expected_entry2 = { 'label' => 'Test', 'lockmode' => 0, 'thumbnail' => 'image://path/to/thumb.jpg' }
-        expected = create_kodi_response(1,
-                                        Types::Profiles::GetProfilesReturned.create(
-                                          { 'limits' => expected_limits,
-                                            'profiles' => [expected_entry1, expected_entry2] }))
+        expected_limits = Types::List::ListLimitsReturned.new(0, 2, 2)
+        expected_profiles = [Types::Profiles::DetailsProfile.new(0, 'a thumbnail', 'Master user'),
+                             Types::Profiles::DetailsProfile.new(0, 'image://path/to/thumb.jpg', 'Test')]
+        expected = create_kodi_response(1, Types::Profiles::GetProfilesReturned.new(expected_limits, expected_profiles))
         assert_equal(expected, actual)
       end
 
@@ -58,4 +55,3 @@ module KodiClient
     end
   end
 end
-

@@ -35,11 +35,14 @@ module KodiClient
     end
 
     def create(hash)
-      hash.nil? ? nil : new(*@kodi_fields.map { |it| hash[it] })
+      return nil if hash.nil?
+      return nil if @kodi_fields.none? { |it| !hash[it].nil? }
+
+      new(*@kodi_fields.map { |it| hash[it] })
     end
 
     def self.hash_to_arr(hash, fields)
-      fields.map { |it| hash[it].nil? ? nil : hash[it].to_s.gsub('_', '') }
+      fields.map { |it| hash[it.to_s.gsub('_', '')].nil? ? nil : hash[it.to_s.gsub('_', '')] }
     end
 
     def hash_to_arr(hash, fields)

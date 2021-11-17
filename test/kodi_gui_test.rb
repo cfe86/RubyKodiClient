@@ -32,13 +32,10 @@ module KodiClient
                    '"label":"Home"},"fullscreen":false,"skin":{"id":"skin.estuary","name":"Estuary"},'\
                    '"stereoscopicmode":{"label":"Disabled","mode":"off"}}}'
         actual = run_test(GUI, post, response, ->(mod) { mod.get_properties })
-        expected_value = PropertyValue.create({
-                                             'currentcontrol' => { 'label' => 'Movies' },
-                                             'currentwindow' => { 'id' => 10_000, 'label' => 'Home' },
-                                             'fullscreen' => false,
-                                             'skin' => { 'id' => 'skin.estuary', 'name' => 'Estuary' },
-                                             'stereoscopicmode' => { 'label' => 'Disabled', 'mode' => 'off' }
-                                           })
+        expected_value = PropertyValue.new(Types::Global::IdLabel.new(nil, 'Movies'),
+                                           Types::Global::IdLabel.new(10_000, 'Home'), false,
+                                           Types::Global::IdName.new('skin.estuary', 'Estuary'),
+                                           StereoscopyMode.new('Disabled', 'off'))
         expected = create_kodi_response(1, expected_value)
         assert_equal(expected, actual)
       end
@@ -49,10 +46,10 @@ module KodiClient
                    '"Over / Under","mode":"split_horizontal"},{"label":"Side by side","mode":"split_vertical"},'\
                    '{"label":"Anaglyph red / cyan","mode":"anaglyph_cyan_red"}]}}'
         actual = run_test(GUI, post, response, ->(mod) { mod.get_stereoscopic_modes })
-        expected_result = [StereoscopyMode.create({ 'label' => 'Disabled', 'mode' => 'off' }),
-                           StereoscopyMode.create({ 'label' => 'Over / Under', 'mode' => 'split_horizontal' }),
-                           StereoscopyMode.create({ 'label' => 'Side by side', 'mode' => 'split_vertical' }),
-                           StereoscopyMode.create({ 'label' => 'Anaglyph red / cyan', 'mode' => 'anaglyph_cyan_red' })]
+        expected_result = [StereoscopyMode.new('Disabled', 'off'),
+                           StereoscopyMode.new('Over / Under', 'split_horizontal'),
+                           StereoscopyMode.new('Side by side', 'split_vertical'),
+                           StereoscopyMode.new('Anaglyph red / cyan', 'anaglyph_cyan_red')]
         expected = create_kodi_response(1, expected_result)
         assert_equal(expected, actual)
       end

@@ -32,11 +32,12 @@ module KodiClient
         response = '{"id":1,"jsonrpc":"2.0","result":{"favourites":[{"path": "the path","title":"test.mkv",'\
                    '"type":"media", "thumbnail": "the thumb"}],'\
                    '"limits":{"end":1,"start":0,"total":1}}}'
-        expected_limits = { 'start' => 0, 'end' => 1, 'total' => 1 }
-        expected_entry = { 'path' => 'the path', 'title' => 'test.mkv', 'type' => 'media', 'thumbnail' => 'the thumb' }
-        expected_return = { 'limits' => expected_limits, 'favourites' => [expected_entry]}
+        expected_limits = Types::List::ListLimitsReturned.new(0, 1, 1)
+        expected_favorites = [Types::Favourites::DetailsFavourite.new('the path', 'the thumb', 'test.mkv', 'media',
+                                                                      nil, nil)]
         actual = run_test(Favourites, post, response, ->(mod) { mod.get_favourites })
-        expected = create_kodi_response(1, Types::Favourites::GetFavouriteReturned.create(expected_return))
+        expected = create_kodi_response(1, Types::Favourites::GetFavouriteReturned.new(expected_favorites,
+                                                                                       expected_limits))
         assert_equal(expected, actual)
       end
     end
