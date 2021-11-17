@@ -46,9 +46,8 @@ module KodiClient
         response = '{"id":1,"jsonrpc":"2.0","result":{"muted":false,"name":"Kodi","version":{"major":17,"minor":6,'\
                    '"revision":"20171114-a9a7a20","tag":"stable"},"volume":100}}'
         actual = run_test(Application, post, response, ->(mod) { mod.get_properties })
-        version = { 'major' => 17, 'minor' => 6, 'revision' => '20171114-a9a7a20', 'tag' => 'stable' }
-        result = Types::Application::PropertyValue.new({ 'muted' => false, 'name' => 'Kodi',
-                                                         'version' => version, 'volume' => 100 })
+        version = Types::Application::Version.new(17, 6, '20171114-a9a7a20', 'stable')
+        result = Types::Application::PropertyValue.new('Kodi', version, false, 100)
         expected = create_kodi_response(1, result)
         assert_equal(expected, actual)
       end

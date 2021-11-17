@@ -20,18 +20,15 @@ module KodiClient
       # System.Property.Value https://kodi.wiki/view/JSON-RPC_API/v12#System.Property.Value
       class PropertyValue
         include Comparable
+        extend Creatable
 
         attr_reader :can_hibernate, :can_reboot, :can_shutdown, :can_suspend
 
-        def initialize(hash)
-          @can_hibernate = hash['canhibernate']
-          @can_reboot = hash['canreboot']
-          @can_shutdown = hash['canshutdown']
-          @can_suspend = hash['cansuspend']
-        end
-
-        def ==(other)
-          compare(self, other)
+        def initialize(can_hibernate, can_reboot, can_shutdown, can_suspend)
+          @can_hibernate = can_hibernate
+          @can_reboot = can_reboot
+          @can_shutdown = can_shutdown
+          @can_suspend = can_suspend
         end
       end
     end

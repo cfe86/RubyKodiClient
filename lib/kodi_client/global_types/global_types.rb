@@ -2,6 +2,7 @@
 
 require 'kodi_client/util/comparable'
 require 'kodi_client/util/iterable'
+require 'kodi_client/util/creatable'
 
 module KodiClient
   module Types
@@ -9,7 +10,7 @@ module KodiClient
 
       # Global.Toggle https://kodi.wiki/view/JSON-RPC_API/v12#Global.Toggle
       module Toggle
-        include Iterable
+        extend Iterable
 
         TOGGLE = 'toggle'
         TRUE = true
@@ -55,48 +56,41 @@ module KodiClient
       # id/label type
       class IdLabel
         include Comparable
+        extend Creatable
+
         attr_reader :id, :label
 
-        def initialize(hash)
-          @id = hash['id']
-          @label = hash['label']
-        end
-
-        def ==(other)
-          compare(self, other)
+        def initialize(id, label)
+          @id = id
+          @label = label
         end
       end
 
       # id/name type
       class IdName
         include Comparable
+        extend Creatable
+
         attr_reader :id, :name
 
-        def initialize(hash)
-          @id = hash['id']
-          @name = hash['name']
-        end
-
-        def ==(other)
-          compare(self, other)
+        def initialize(id, name)
+          @id = id
+          @name = name
         end
       end
 
       # Global.Time https://kodi.wiki/view/JSON-RPC_API/v12#Global.Time
       class GlobalTime
         include Comparable
+        extend Creatable
 
         attr_reader :hours, :minutes, :seconds, :milliseconds
 
-        def initialize(hash)
-          @hours = hash['hours']
-          @minutes = hash['minutes']
-          @seconds = hash['seconds']
-          @milliseconds = hash['milliseconds']
-        end
-
-        def ==(other)
-          compare(self, other)
+        def initialize(hours, minutes, seconds, milliseconds)
+          @hours = hours
+          @minutes = minutes
+          @seconds = seconds
+          @milliseconds = milliseconds
         end
       end
 

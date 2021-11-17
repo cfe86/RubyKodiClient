@@ -36,7 +36,7 @@ module KodiClient
         expected_entry = { 'path' => 'the path', 'title' => 'test.mkv', 'type' => 'media', 'thumbnail' => 'the thumb' }
         expected_return = { 'limits' => expected_limits, 'favourites' => [expected_entry]}
         actual = run_test(Favourites, post, response, ->(mod) { mod.get_favourites })
-        expected = create_kodi_response(1, Types::Favourites::GetFavouriteReturned.new(expected_return))
+        expected = create_kodi_response(1, Types::Favourites::GetFavouriteReturned.create(expected_return))
         assert_equal(expected, actual)
       end
     end

@@ -31,7 +31,7 @@ module KodiClient
                    '"result":{"canhibernate":true,"canreboot":true,"canshutdown":true,"cansuspend":true}}'
         actual = run_test(System, post, response, ->(mod) { mod.get_properties })
         expected_entry = { 'canhibernate' => true, 'canreboot' => true, 'canshutdown' => true, 'cansuspend' => true }
-        expected = create_kodi_response(1, Types::System::PropertyValue.new(expected_entry))
+        expected = create_kodi_response(1, Types::System::PropertyValue.create(expected_entry))
         assert_equal(expected, actual)
       end
 

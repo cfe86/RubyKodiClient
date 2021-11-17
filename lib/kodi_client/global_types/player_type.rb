@@ -20,6 +20,7 @@ module KodiClient
       # Player.ViewMode https://kodi.wiki/view/JSON-RPC_API/v12#Player.ViewMode
       module ViewMode
         extend Iterable
+
         NORMAL = 'normal'
         ZOOM = 'zoom'
         STRETCH_4x3 = 'strech4x3'
@@ -34,6 +35,7 @@ module KodiClient
       # player types
       module PlayerVisibilityType
         extend Iterable
+
         INTERNAL = 'internal'
         EXTERNAL = 'external'
         REMOTE = 'remote'
@@ -80,87 +82,75 @@ module KodiClient
       # player id and type
       class Player
         include Comparable
+        extend Creatable
 
         attr_reader :player_id, :player_type, :type, :name, :plays_audio, :plays_video
 
-        def initialize(hash)
-          @player_id = hash['playerid']
-          @player_type = hash['playertype']
-          @type = hash['type']
-          @name = hash['name']
-          @plays_audio = hash['playsaudio']
-          @plays_video = hash['playsvideo']
-        end
-
-        def ==(other)
-          compare(self, other)
+        def initialize(player_id, player_type, type, name, plays_audio, plays_video)
+          @player_id = player_id
+          @player_type = player_type
+          @type = type
+          @name = name
+          @plays_audio = plays_audio
+          @plays_video = plays_video
         end
       end
 
       # Player Subtitle https://kodi.wiki/view/JSON-RPC_API/v12#Player.Subtitle
       class Subtitle
         include Comparable
+        extend Creatable
 
         attr_reader :index, :is_default, :is_forced, :is_impaired, :language, :name
 
-        def initialize(hash)
-          @index = hash['index']
-          @is_default = hash['isdefault']
-          @is_forced = hash['isforced']
-          @is_impaired = hash['isimpaired']
-          @language = hash['language']
-          @name = hash['name']
-        end
-
-        def ==(other)
-          compare(self, other)
+        def initialize(index, is_default, is_forced, is_impaired, language, name)
+          @index = index
+          @is_default = is_default
+          @is_forced = is_forced
+          @is_impaired = is_impaired
+          @language = language
+          @name = name
         end
       end
 
       # Player.Audio.Stream https://kodi.wiki/view/JSON-RPC_API/v12#Player.Audio.Stream
       class AudioStream
         include Comparable
+        extend Creatable
 
         attr_reader :bitrate, :channels, :codec, :index, :is_default, :is_forced, :is_original, :language,
                     :name, :sample_rate
 
-        def initialize(hash)
-          @bitrate = hash['bitrate']
-          @channels = hash['channels']
-          @codec = hash['codec']
-          @index = hash['index']
-          @is_default = hash['isdefault']
-          @is_forced = hash['isforced']
-          @is_original = hash['isoriginal']
-          @language = hash['language']
-          @name = hash['name']
-          @sample_rate = hash['samplerate']
-        end
-
-        def ==(other)
-          compare(self, other)
+        def initialize(bitrate, channels, codec, index, is_default, is_forced, is_original, language, name, sample_rate)
+          @bitrate = bitrate
+          @channels = channels
+          @codec = codec
+          @index = index
+          @is_default = is_default
+          @is_forced = is_forced
+          @is_original = is_original
+          @language = language
+          @name = name
+          @sample_rate = sample_rate
         end
       end
 
       # Player.Video.Stream https://kodi.wiki/view/JSON-RPC_API/v12#Player.Video.Stream
       class VideoStream
         include Comparable
+        extend Creatable
 
         attr_reader :codec, :height, :index, :language, :name, :width, :duration, :aspect
 
-        def initialize(hash)
-          @codec = hash['codec']
-          @height = hash['height']
-          @index = hash['index']
-          @language = hash['language']
-          @name = hash['name']
-          @width = hash['width']
-          @duration = hash['duration']
-          @aspect = hash['aspect']
-        end
-
-        def ==(other)
-          compare(self, other)
+        def initialize(codec, height, index, language, name, width, duration, aspect)
+          @codec = codec
+          @height = height
+          @index = index
+          @language = language
+          @name = name
+          @width = width
+          @duration = duration
+          @aspect = aspect
         end
       end
 
@@ -198,76 +188,99 @@ module KodiClient
       # Player.Property.Value https://kodi.wiki/view/JSON-RPC_API/v12#Player.Property.Name
       class PropertyValue
         include Comparable
+        extend Creatable
 
-        def initialize(hash)
-          @audio_streams = hash['audiostreams'].map { |it| AudioStream.new(it) }
-          @cache_percentage = hash['cachepercentage']
-          @can_change_speed = hash['canchangespeed']
-          @can_move = hash['canmove']
-          @can_repeat = hash['canrepeat']
-          @can_rotate = hash['canrotate']
-          @can_seek = hash['canseek']
-          @can_shuffle = hash['canshuffle']
-          @can_zoom = hash['canzoom']
-          @current_audio_stream = AudioStream.new(hash['currentaudiostream'])
-          @current_subtitle = Subtitle.new(hash['currentsubtitle'])
-          @current_video_stream = VideoStream.new(hash['currentvideostream'])
-          @live = hash['live']
-          @party_mode = hash['partymode']
-          @percentage = hash['percentage']
-          @playlist_id = hash['playlistid'].nil? ? -1 : hash['playlistid']
-          @position = hash['position'].nil? ? -1 : hash['position']
-          @position = hash['position'].nil? ? -1 : hash['position']
-          @repeat = hash['repeat'].nil? ? PlayerRepeat::OFF : hash['repeat']
-          @shuffled = hash['shuffled']
-          @speed = hash['speed']
-          @subtitle_enabled = hash['subtitleenabled']
-          @subtitles = hash['subtitles'].map { |it| Subtitle.new(it) }
-          @time = Types::Global::GlobalTime.new(hash['time'])
-          @total_time = Types::Global::GlobalTime.new(hash['totaltime'])
-          @type = hash['type'].nil? ? PlayerType::VIDEO : hash['type']
-          @video_streams = hash['videostreams'].map { |it| VideoStream.new(it) }
+        attr_reader :audio_streams, :cache_percentage, :can_change_speed, :can_move, :can_repeat, :can_rotate,
+                    :can_seek, :can_shuffle, :can_zoom, :current_audio_stream, :current_subtitle, :current_video_stream,
+                    :live, :party_mode, :percentage, :playlist_id, :position, :repeat, :shuffled, :speed,
+                    :subtitle_enabled, :subtitles, :time, :total_time, :type, :video_streams
+
+        def self.create(hash)
+          return nil if hash.nil?
+
+          audio_streams = AudioStream.create_list(hash['audiostreams'])
+          current_audio_stream = AudioStream.create(hash['currentaudiostream'])
+          current_subtitle = Subtitle.create(hash['currentsubtitle'])
+          current_video_stream = VideoStream.create(hash['currentvideostream'])
+          subtitles = Subtitle.create_list(hash['subtitles'])
+          time = Types::Global::GlobalTime.create(hash['time'])
+          total_time = Types::Global::GlobalTime.create(hash['totaltime'])
+          video_streams = VideoStream.create_list(hash['videostreams'])
+
+          hash['type'] = PlayerType::VIDEO if hash['type'].nil?
+          hash['playlistid'] = -1 if hash['playlistid'].nil?
+          hash['position'] = -1 if hash['position'].nil?
+          hash['repeat'] = PlayerRepeat::OFF if hash['repeat'].nil?
+
+          new(audio_streams, *Creatable.hash_to_arr(hash, %w[cache_percentage can_change_speed can_move
+                                                             can_repeat can_rotate can_seek can_shuffle can_zoom]),
+              current_audio_stream, current_subtitle, current_video_stream,
+              *Creatable.hash_to_arr(hash, %w[live party_mode percentage playlist_id position repeat
+                                              shuffled speed subtitle_enabled]), subtitles, time, total_time,
+              hash['type'], video_streams)
         end
 
-        def ==(other)
-          compare(self, other)
+        def initialize(audio_streams, cache_percentage, can_change_speed, can_move, can_repeat, can_rotate, can_seek,
+                       can_shuffle, can_zoom, current_audio_stream, current_subtitle, current_video_stream, live,
+                       party_mode, percentage, playlist_id, position, repeat, shuffled, speed,
+                       subtitle_enabled, subtitles, time, total_time, type, video_streams)
+          @audio_streams = audio_streams
+          @cache_percentage = cache_percentage
+          @can_change_speed = can_change_speed
+          @can_move = can_move
+          @can_repeat = can_repeat
+          @can_rotate = can_rotate
+          @can_seek = can_seek
+          @can_shuffle = can_shuffle
+          @can_zoom = can_zoom
+          @current_audio_stream = current_audio_stream
+          @current_subtitle = current_subtitle
+          @current_video_stream = current_video_stream
+          @live = live
+          @party_mode = party_mode
+          @percentage = percentage
+          @playlist_id = playlist_id
+          @position = position
+          @repeat = repeat
+          @shuffled = shuffled
+          @speed = speed
+          @subtitle_enabled = subtitle_enabled
+          @subtitles = subtitles
+          @time = time
+          @total_time = total_time
+          @type = type
+          @video_streams = video_streams
         end
       end
 
       # return value for Player.GetViewMode
       class PlayerViewMode
         include Comparable
+        extend Creatable
 
         attr_reader :nonlinear_stretch, :pixel_ratio, :vertical_shift, :view_mode, :zoom
 
-        def initialize(hash)
-          @nonlinear_stretch = hash['nonlinearstretch']
-          @pixel_ratio = hash['pixelratio']
-          @vertical_shift = hash['verticalshift']
-          @view_mode = hash['viewed']
-          @zoom = hash['zoom']
-        end
-
-        def ==(other)
-          compare(self, other)
+        def initialize(nonlinear_stretch, pixel_ratio, vertical_shift, view_mode, zoom)
+          @nonlinear_stretch = nonlinear_stretch
+          @pixel_ratio = pixel_ratio
+          @vertical_shift = vertical_shift
+          @view_mode = view_mode
+          @zoom = zoom
         end
       end
 
       # Player.Position.Time https://kodi.wiki/view/JSON-RPC_API/v12#Player.Position.Time
       class PlayerPositionTime
         include Comparable
+        extend Creatable
 
         attr_reader :hours, :minutes, :seconds, :milliseconds
 
-        def initialize(hash)
-          @hours = hash['hours']
-          @minutes = hash['minutes']
-          @seconds = hash['seconds']
-          @milliseconds = hash['milliseconds']
-        end
-
-        def ==(other)
-          compare(self, other)
+        def initialize(hours, minutes, seconds, milliseconds)
+          @hours = hours
+          @minutes = minutes
+          @seconds = seconds
+          @milliseconds = milliseconds
         end
       end
 
@@ -282,17 +295,23 @@ module KodiClient
       end
 
       # return value of Player.Seek
-      class SeekReturnValue
+      class SeekReturned
         include Comparable
+        extend Creatable
 
-        def initialize(hash)
-          @percentage = hash['percentage']
-          @time = Types::Global::GlobalTime.new(hash['time'])
-          @total_time = Types::Global::GlobalTime.new(hash['totaltime'])
+        def self.create(hash)
+          return nil if hash.nil?
+
+          time = Types::Global::GlobalTime.create(hash['time'])
+          total_time = Types::Global::GlobalTime.create(hash['totaltime'])
+
+          new(hash['percentage'], time, total_time)
         end
 
-        def ==(other)
-          compare(self, other)
+        def initialize(percentage, time, total_time)
+          @percentage = percentage
+          @time = time
+          @total_time = total_time
         end
       end
     end

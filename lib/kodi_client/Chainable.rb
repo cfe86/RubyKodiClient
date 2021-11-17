@@ -24,7 +24,7 @@ module KodiClient
       client = def_client
       options = def_options
       set_command.call(options)
-      client.apply_options(options)
+      client.apply_options_to_methods(options)
       client
     end
 

@@ -25,7 +25,7 @@ module KodiClient
       def get_properties(properties = Types::System::PropertyName.all_properties, kodi_id = 1)
         request = KodiRequest.new(kodi_id, GET_PROPERTIES, { 'properties' => properties })
         json = invoke_api(request)
-        result = json['result'].nil? ? nil : Types::System::PropertyValue.new(json['result'])
+        result = Types::System::PropertyValue.create(json['result'])
         json['result'] = result
         KodiResponse.new(json)
       end

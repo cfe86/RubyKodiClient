@@ -9,8 +9,12 @@ module KodiClient
 
         attr_reader :label
 
-        def item_details_base(hash)
-          @label = hash['label']
+        def item_details_base_by_hash(hash)
+          item_details_base(hash['label'])
+        end
+
+        def item_details_base(label)
+          @label = label
         end
       end
     end

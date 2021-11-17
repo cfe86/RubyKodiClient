@@ -3,6 +3,7 @@
 require 'kodi_client/global_types/global_types'
 require 'kodi_client/util/comparable'
 require 'kodi_client/util/iterable'
+require 'kodi_client/util/creatable'
 
 module KodiClient
   module Types
@@ -10,6 +11,7 @@ module KodiClient
 
       # GUI.Window https://kodi.wiki/view/JSON-RPC_API/v12#GUI.Window
       module GUIWindow
+        extend Iterable
 
         ACCESSPOINTS = 'accesspoints'
         ADDON = 'addon'
@@ -139,6 +141,7 @@ module KodiClient
       class StereoscopyMode
         include Comparable
         include Iterable
+        extend Creatable
 
         attr_reader :label, :mode
 
@@ -152,32 +155,35 @@ module KodiClient
         ANAGLYPH_YELLOW_BLUE = 'anaglyph_yellow_blue'
         MONSCOPIC = 'monoscopic'
 
-        def initialize(hash)
-          @label = hash['label']
-          @mode = hash['mode']
-        end
-
-        def ==(other)
-          compare(self, other)
+        def initialize(label, mode)
+          @label = label
+          @mode = mode
         end
       end
 
       # GUI.Property.Value https://kodi.wiki/view/JSON-RPC_API/v12#GUI.Property.Value
       class PropertyValue
         include Comparable
+        extend Creatable
 
         attr_reader :current_control, :current_window, :fullscreen, :skin, :stereoscopic_mode
 
-        def initialize(hash)
-          @current_control = Global::IdLabel.new(hash['currentcontrol'])
-          @current_window = Global::IdLabel.new(hash['currentwindow'])
-          @fullscreen = hash['fullscreen']
-          @skin = Global::IdName.new(hash['skin'])
-          @stereoscopic_mode = StereoscopyMode.new(hash['stereoscopicmode'])
+        def self.create(hash)
+          return nil if hash.nil?
+
+          current_control = Global::IdLabel.create(hash['currentcontrol'])
+          current_window = Global::IdLabel.create(hash['currentwindow'])
+          skin = Global::IdName.create(hash['skin'])
+          stereoscopic_mode = StereoscopyMode.create(hash['stereoscopicmode'])
+          new(current_control, current_window, hash['fullscreen'], skin, stereoscopic_mode)
         end
 
-        def ==(other)
-          compare(self, other)
+        def initialize(current_control, current_window, fullscreen, skin, stereoscopic_mode)
+          @current_control = current_control
+          @current_window = current_window
+          @fullscreen = fullscreen
+          @skin = skin
+          @stereoscopic_mode = stereoscopic_mode
         end
       end
     end

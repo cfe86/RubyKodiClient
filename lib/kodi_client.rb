@@ -35,15 +35,11 @@ module KodiClient
       @system = KodiClient::Modules::System.new
     end
 
-    def apply_options(options)
-      @addons.apply_options(options)
-      @application.apply_options(options)
-      @gui.apply_options(options)
-      @input.apply_options(options)
-      @player.apply_options(options)
-      @favourites.apply_options(options)
-      @profiles.apply_options(options)
-      @system.apply_options(options)
+    def apply_options_to_methods(options)
+      instance_variables.each do |it|
+        mod = instance_variable_get(it)
+        mod.apply_options(options) if mod.is_a?(KodiClient::KodiModule)
+      end
     end
   end
 end

@@ -32,7 +32,7 @@ module KodiClient
                    '"label":"Home"},"fullscreen":false,"skin":{"id":"skin.estuary","name":"Estuary"},'\
                    '"stereoscopicmode":{"label":"Disabled","mode":"off"}}}'
         actual = run_test(GUI, post, response, ->(mod) { mod.get_properties })
-        expected_value = PropertyValue.new({
+        expected_value = PropertyValue.create({
                                              'currentcontrol' => { 'label' => 'Movies' },
                                              'currentwindow' => { 'id' => 10_000, 'label' => 'Home' },
                                              'fullscreen' => false,
@@ -49,10 +49,10 @@ module KodiClient
                    '"Over / Under","mode":"split_horizontal"},{"label":"Side by side","mode":"split_vertical"},'\
                    '{"label":"Anaglyph red / cyan","mode":"anaglyph_cyan_red"}]}}'
         actual = run_test(GUI, post, response, ->(mod) { mod.get_stereoscopic_modes })
-        expected_result = [StereoscopyMode.new({ 'label' => 'Disabled', 'mode' => 'off' }),
-                           StereoscopyMode.new({ 'label' => 'Over / Under', 'mode' => 'split_horizontal' }),
-                           StereoscopyMode.new({ 'label' => 'Side by side', 'mode' => 'split_vertical' }),
-                           StereoscopyMode.new({ 'label' => 'Anaglyph red / cyan', 'mode' => 'anaglyph_cyan_red' })]
+        expected_result = [StereoscopyMode.create({ 'label' => 'Disabled', 'mode' => 'off' }),
+                           StereoscopyMode.create({ 'label' => 'Over / Under', 'mode' => 'split_horizontal' }),
+                           StereoscopyMode.create({ 'label' => 'Side by side', 'mode' => 'split_vertical' }),
+                           StereoscopyMode.create({ 'label' => 'Anaglyph red / cyan', 'mode' => 'anaglyph_cyan_red' })]
         expected = create_kodi_response(1, expected_result)
         assert_equal(expected, actual)
       end

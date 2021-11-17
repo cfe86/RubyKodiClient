@@ -28,7 +28,7 @@ module KodiClient
         params['type'] = type unless type.nil?
         request = KodiRequest.new(kodi_id, GET_FAVOURITES, params)
         json = invoke_api(request)
-        result = json['result'].nil? ? nil : Types::Favourites::GetFavouriteReturned.new(json['result'])
+        result = Types::Favourites::GetFavouriteReturned.create(json['result'])
         json['result'] = result
         KodiResponse.new(json)
       end

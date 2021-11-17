@@ -3,6 +3,7 @@
 require 'kodi_client/global_types/item_types'
 require 'kodi_client/util/comparable'
 require 'kodi_client/util/iterable'
+require 'kodi_client/util/creatable'
 
 module KodiClient
   module Types
@@ -10,7 +11,7 @@ module KodiClient
 
       # Addon Types https://kodi.wiki/view/JSON-RPC_API/v12#Addon.Types
       module AddonTypes
-        include Iterable
+        extend Iterable
 
         UNKNOWN = 'unknown'
         KODI_ADSP = 'kodi.adsp'
@@ -51,7 +52,8 @@ module KodiClient
 
       # Addon.Content https://kodi.wiki/view/JSON-RPC_API/v12#Addon.Content
       module AddonContent
-        include Iterable
+        extend Iterable
+
         UNKNOWN = 'unknown'
         AUDIO = 'audio'
         EXECUTABLE = 'executable'
@@ -83,33 +85,27 @@ module KodiClient
       # represents addon dependency
       class AddonDependency
         include Comparable
+        extend Creatable
 
-        attr_reader :addonid, :optional, :version
+        attr_reader :addon_id, :optional, :version
 
-        def initialize(hash)
-          @addonid = hash['addonid']
-          @optional = hash['optional']
-          @version = hash['version']
-        end
-
-        def ==(other)
-          compare(self, other)
+        def initialize(addon_id, optional, version)
+          @addon_id = addon_id
+          @optional = optional
+          @version = version
         end
       end
 
       # represents addon extra info
       class AddonExtraInfo
         include Comparable
+        extend Creatable
 
         attr_reader :key, :value
 
-        def initialize(hash)
-          @key = hash['key']
-          @value = hash['value']
-        end
-
-        def ==(other)
-          compare(self, other)
+        def initialize(key, value)
+          @key = key
+          @value = value
         end
       end
 
@@ -117,33 +113,43 @@ module KodiClient
       class AddonDetails
         include Comparable
         include Items::ItemDetailsBase
+        extend Creatable
 
         attr_reader :addon_id, :author, :broken, :dependencies, :description, :disclaimer, :enabled, :extra_info,
                     :fan_art, :installed, :name, :path, :rating, :summary, :thumbnail, :type, :version
 
-        def initialize(hash)
-          @addon_id = hash['addonid']
-          @author = hash['author']
-          @broken = hash['broken']
-          @dependencies = hash['dependencies'].nil? ? nil : hash['dependencies'].map { |it| AddonDependency.new(it) }
-          @description = hash['description']
-          @disclaimer = hash['disclaimer']
-          @enabled = hash['enabled']
-          @extra_info = hash['extrainfo'].nil? ? nil : hash['extrainfo'].map { |it| AddonExtraInfo.new(it) }
-          @fan_art = hash['fanart']
-          @installed = hash['installed']
-          @name = hash['name']
-          @path = hash['path']
-          @rating = hash['rating']
-          @summary = hash['summary']
-          @thumbnail = hash['thumbnail']
-          @type = hash['type']
-          @version = hash['version']
-          item_details_base(hash)
+        def self.create(hash)
+          return nil if hash.nil?
+
+          dependencies = AddonDependency.create_list(hash['dependencies'])
+          extra_info = AddonExtraInfo.create_list(hash['extrainfo'])
+
+          new(hash['addonid'], hash['author'], hash['broken'], dependencies, hash['description'], hash['disclaimer'],
+              hash['enabled'], extra_info, hash['fanart'], hash['installed'], hash['name'], hash['path'],
+              hash['rating'], hash['summary'], hash['thumbnail'], hash['type'], hash['version'],
+              *hash_to_arr(hash, ['label']))
         end
 
-        def ==(other)
-          compare(self, other)
+        def initialize(addon_id, author, broken, dependencies, description, disclaimer, enabled, extra_info,
+                       fan_art, installed, name, path, rating, summary, thumbnail, type, version, label)
+          @addon_id = addon_id
+          @author = author
+          @broken = broken
+          @dependencies = dependencies
+          @description = description
+          @disclaimer = disclaimer
+          @enabled = enabled
+          @extra_info = extra_info
+          @fan_art = fan_art
+          @installed = installed
+          @name = name
+          @path = path
+          @rating = rating
+          @summary = summary
+          @thumbnail = thumbnail
+          @type = type
+          @version = version
+          item_details_base(label)
         end
       end
 
@@ -153,13 +159,17 @@ module KodiClient
 
         attr_reader :addons, :limits
 
-        def initialize(hash)
-          @addons = hash['addons'].map { |it| AddonDetails.new(it) }
-          @limits = List::ListLimitsReturned.new(hash['limits'])
+        def self.create(hash)
+          return nil if hash.nil?
+
+          addons = AddonDetails.create_list(hash['addons'])
+          limits = List::ListLimitsReturned.create(hash['limits'])
+          new(addons, limits)
         end
 
-        def ==(other)
-          compare(self, other)
+        def initialize(addons, limits)
+          @addons = addons
+          @limits = limits
         end
       end
 
@@ -169,12 +179,14 @@ module KodiClient
 
         attr_reader :addon
 
-        def initialize(hash)
-          @addon = AddonDetails.new(hash['addon'])
+        def self.create(hash)
+          return nil if hash.nil?
+
+          new(AddonDetails.create(hash['addon']))
         end
 
-        def ==(other)
-          compare(self, other)
+        def initialize(addon)
+          @addon = addon
         end
       end
     end
