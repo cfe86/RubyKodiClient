@@ -2,13 +2,13 @@
 
 Gem::Specification.new do |spec|
   spec.name          = 'kodi_client'
-  spec.version       = '0.5.6'
+  spec.version       = '0.6.0'
   spec.authors       = ['Christian Feier']
   spec.email         = ['christian.feier@gmail.com']
 
   spec.summary       = 'A work-in-progress client for Kodi JSON API v2.'
-  spec.description   = 'A client for the Kodi JSON API v12, currently implemented methods are addons, application, '\
-                       'favourites, gui, input, player, profile and system (more will be added with the time). '\
+  spec.description   = 'A client for the Kodi JSON API v12, currently implemented methods are Addons, Application, '\
+                       'Favourites, Files, GUI, Input, Player, Profiles and System (more will be added with the time). '\
                        'For more information how to use it and how to activate Remote Control in Kodi, '\
                        'please check the github page https://github.com/cfe86/RubyKodiClient'
   spec.homepage      = 'https://github.com/cfe86/RubyKodiClient'

@@ -6,10 +6,11 @@ Currently implemented are the following Methods:
 * Addons
 * Application
 * Favourites
+* Files
 * GUI
 * Input
 * Player
-* Profile
+* Profiles
 * System
 
 ## Installation

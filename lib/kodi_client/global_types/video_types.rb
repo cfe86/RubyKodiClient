@@ -126,6 +126,8 @@ module KodiClient
         attr_reader :audio, :subtitle, :video
 
         def self.create(hash)
+          return nil if hash.nil?
+
           audio = Types::Player::AudioStream.create_list(hash['audio'])
           subtitle = Types::Player::Subtitle.create_list(hash['subtitle'])
           video = Types::Player::VideoStream.create_list(hash['video'])

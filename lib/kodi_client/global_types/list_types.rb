@@ -153,6 +153,95 @@ module KodiClient
         YEAR = 'year'
       end
 
+      # List.Fields.Files https://kodi.wiki/view/JSON-RPC_API/v12#List.Fields.Files
+      module ListFieldFiles
+        extend Iterable
+
+        ALBUM = 'album'
+        ALBUMARTIST = 'albumartist'
+        ALBUMARTISTID = 'albumartistid'
+        ALBUMID = 'albumid'
+        ALBUMLABEL = 'albumlabel'
+        ART = 'art'
+        ARTIST = 'artist'
+        ARTISTID = 'artistid'
+        CAST = 'cast'
+        COMMENT = 'comment'
+        COUNTRY = 'country'
+        DATEADDED = 'dateadded'
+        DESCRIPTION = 'description'
+        DIRECTOR = 'director'
+        DISC = 'disc'
+        DISPLAYARTIST = 'displayartist'
+        DURATION = 'duration'
+        EPISODE = 'episode'
+        EPISODEGUIDE = 'episodeguide'
+        FANART = 'fanart'
+        FILE = 'file'
+        FIRSTAIRED = 'firstaired'
+        GENRE = 'genre'
+        GENREID = 'genreid'
+        IMDBNUMBER = 'imdbnumber'
+        LASTMODIFIED = 'lastmodified'
+        LASTPLAYED = 'lastplayed'
+        LYRICS = 'lyrics'
+        MIMETYPE = 'mimetype'
+        MOOD = 'mood'
+        MPAA = 'mpaa'
+        MUSICBRAINZALBUMARTISTID = 'musicbrainzalbumartistid'
+        MUSICBRAINZALBUMID = 'musicbrainzalbumid'
+        MUSICBRAINZARTISTID = 'musicbrainzartistid'
+        MUSICBRAINZTRACKID = 'musicbrainztrackid'
+        ORIGINALTITLE = 'originaltitle'
+        PLAYCOUNT = 'playcount'
+        PLOT = 'plot'
+        PLOTOUTLINE = 'plotoutline'
+        PREMIERED = 'premiered'
+        PRODUCTIONCODE = 'productioncode'
+        RATING = 'rating'
+        RESUME = 'resume'
+        RUNTIME = 'runtime'
+        SEASON = 'season'
+        SET = 'set'
+        SETID = 'setid'
+        SHOWLINK = 'showlink'
+        SHOWTITLE = 'showtitle'
+        SIZE = 'size'
+        SORTTITLE = 'sorttitle'
+        SPECIALSORTEPISODE = 'specialsortepisode'
+        SPECIALSORTSEASON = 'specialsortseason'
+        STREAMDETAILS = 'streamdetails'
+        STUDIO = 'studio'
+        STYLE = 'style'
+        TAG = 'tag'
+        TAGLINE = 'tagline'
+        THEME = 'theme'
+        THUMBNAIL = 'thumbnail'
+        TITLE = 'title'
+        TOP250 = 'top250'
+        TRACK = 'track'
+        TRAILER = 'trailer'
+        TVSHOWID = 'tvshowid'
+        UNIQUEID = 'uniqueid'
+        VOTES = 'votes'
+        WATCHEDEPISODES = 'watchedepisodes'
+        WRITER = 'writer'
+        YEAR = 'year'
+      end
+
+      # File/Label tuple
+      class FileLabel
+        include Comparable
+        extend Creatable
+
+        attr_reader :file, :label
+
+        def initialize(file, label)
+          @file = file
+          @label = label
+        end
+      end
+
       # List.Item.Base https://kodi.wiki/view/JSON-RPC_API/v12#List.Item.Base
       module ListItemBase
         include Video::VideoDetailsFile
@@ -299,7 +388,7 @@ module KodiClient
           stream_details = Types::Video::Streams.create(hash['streamdetails'])
           art = Types::Media::MediaArtwork.create(hash['art'])
           hash['type'] = 'unknown' if hash['type'].nil?
-          new(*Creatable.hash_to_arr(hash, %w[channel channel_number channel_type end_time hidden locked start_time 
+          new(*Creatable.hash_to_arr(hash, %w[channel channel_number channel_type end_time hidden locked start_time
                                               sub_channel_number album album_artist album_artist_id album_id
                                               album_release_type album_status bit_rate bpm]), cast,
               hash['channels'], hash['comment'], hash['compilation'], contributors,
@@ -356,9 +445,76 @@ module KodiClient
                          fan_art, thumbnail, label, artist, artist_id, display_artist, musicbrainz_album_artist_id,
                          rating, sort_artist, user_rating, year, genre)
         end
+      end
 
-        def ==(other)
-          compare(self, other)
+      # List.Item.File https://kodi.wiki/view/JSON-RPC_API/v12#List.Item.File
+      class ListItemFile
+        include ListItemBase
+        include Comparable
+        extend Creatable
+
+        attr_reader :file, :file_type, :last_modified, :mime_type, :size
+
+        def self.create(hash)
+          return nil if hash.nil?
+
+          cast = Types::Video::VideoCast.create_list(hash['cast'])
+          contributors = Types::Audio::AudioContributor.create_list(hash['contributors'])
+          resume = Types::Video::VideoResume.create(hash['resume'])
+          stream_details = Types::Video::Streams.create(hash['streamdetails'])
+          art = Types::Media::MediaArtwork.create(hash['art'])
+          hash['type'] = 'unknown' if hash['type'].nil?
+          new(*Creatable.hash_to_arr(hash, %w[file_type last_modified mime_type size]),
+              *Creatable.hash_to_arr(hash, %w[album album_artist album_artist_id album_id
+                                              album_release_type album_status bit_rate bpm]), cast,
+              hash['channels'], hash['comment'], hash['compilation'], contributors,
+              *Creatable.hash_to_arr(hash, %w[country description disc disc_title display_composer
+                                              display_conductor display_lyricist display_orchestra duration
+                                              dyn_path episode episode_guide first_aired id imdb_number
+                                              is_box_set lyrics media_path mood mpaa musicbrainz_artist_id
+                                              musicbrainz_track_id original_date original_title plot_outline
+                                              premiered production_code release_date release_type sample_rate
+                                              season set set_id show_link show_title sort_title
+                                              special_sort_episode special_sort_season studio style tag
+                                              tag_line theme top250 total_discs track trailer tv_show_id
+                                              type unique_id votes watched_episodes writer director]),
+              resume, hash['runtime'], stream_details,
+              *Creatable.hash_to_arr(hash, %w[date_added file last_played plot title]), art,
+              *Creatable.hash_to_arr(hash, %w[play_count fan_art thumbnail label artist artist_id
+                                              display_artist musicbrainz_album_artist_id rating sort_artist
+                                              user_rating year genre]))
+        end
+
+        def initialize(file_type, last_modified, mime_type, size,
+                       album, album_artist, album_artist_id, album_id, album_release_type, album_status, bit_rate,
+                       bpm, cast, channels, comment, compilation, contributors, country, description, disc,
+                       disc_title, display_composer, display_conductor, display_lyricist, display_orchestra,
+                       duration, dyn_path, episode, episode_guide, first_aired, id, imdb_number, is_box_set,
+                       lyrics, media_path, mood, mpaa, musicbrainz_artist_id, musicbrainz_track_id, original_date,
+                       original_title, plot_outline, premiered, production_code, release_date, release_type,
+                       sample_rate, season, set, set_id, show_link, show_title, sort_title, special_sort_episode,
+                       special_sort_season, studio, style, tag, tag_line, theme, top250, total_discs, track,
+                       trailer, tv_show_id, type, unique_id, votes, watched_episodes, writer, director, resume,
+                       runtime, stream_details, date_added, file, last_played, plot, title, art, play_count,
+                       fan_art, thumbnail, label, artist, artist_id, display_artist, musicbrainz_album_artist_id,
+                       rating, sort_artist, user_rating, year, genre)
+          @file = file
+          @file_type = file_type
+          @last_modified = last_modified
+          @mime_type = mime_type
+          @size = size
+          list_item_base(album, album_artist, album_artist_id, album_id, album_release_type, album_status, bit_rate,
+                         bpm, cast, channels, comment, compilation, contributors, country, description, disc,
+                         disc_title, display_composer, display_conductor, display_lyricist, display_orchestra,
+                         duration, dyn_path, episode, episode_guide, first_aired, id, imdb_number, is_box_set,
+                         lyrics, media_path, mood, mpaa, musicbrainz_artist_id, musicbrainz_track_id, original_date,
+                         original_title, plot_outline, premiered, production_code, release_date, release_type,
+                         sample_rate, season, set, set_id, show_link, show_title, sort_title, special_sort_episode,
+                         special_sort_season, studio, style, tag, tag_line, theme, top250, total_discs, track,
+                         trailer, tv_show_id, type, unique_id, votes, watched_episodes, writer, director, resume,
+                         runtime, stream_details, date_added, file, last_played, plot, title, art, play_count,
+                         fan_art, thumbnail, label, artist, artist_id, display_artist, musicbrainz_album_artist_id,
+                         rating, sort_artist, user_rating, year, genre)
         end
       end
 
