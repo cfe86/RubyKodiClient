@@ -41,7 +41,7 @@ module KodiClient
       def get_active_players(kodi_id = 1)
         request = KodiRequest.new(kodi_id, GET_ACTIVE_PLAYER, {})
         json = invoke_api(request)
-        result = json['result'].nil? ? nil : json['result'].map { |it| Types::Player::Player.new(it) }
+        result = Types::Player::Player.create_list(json['result'])
         json['result'] = result
         KodiResponse.new(json)
       end
@@ -57,7 +57,7 @@ module KodiClient
         request = KodiRequest.new(kodi_id, GET_ITEM, { 'playerid' => player_id,
                                                        'properties' => properties })
         json = invoke_api(request)
-        result = Types::List::ListItemAll.new(json['result']['item'])
+        result = Types::List::ListItemAll.create(json['result']['item'])
         json['result'] = result
         KodiResponse.new(json)
       end
@@ -65,7 +65,7 @@ module KodiClient
       def get_players(media = Types::Media::MediaType::ALL, kodi_id = 1)
         request = KodiRequest.new(kodi_id, GET_PLAYERS, { 'media' => media })
         json = invoke_api(request)
-        result = json['result'].map { |it| Types::Player::Player.new(it) }
+        result = Types::Player::Player.create_list(json['result'])
         json['result'] = result
         KodiResponse.new(json)
       end
@@ -74,7 +74,7 @@ module KodiClient
         request = KodiRequest.new(kodi_id, GET_PROPERTIES, { 'playerid' => player_id,
                                                              'properties' => properties })
         json = invoke_api(request)
-        result = Types::Player::PropertyValue.new(json['result'])
+        result = Types::Player::PropertyValue.create(json['result'])
         json['result'] = result
         KodiResponse.new(json)
       end
@@ -82,7 +82,7 @@ module KodiClient
       def get_view_mode(kodi_id = 1)
         request = KodiRequest.new(kodi_id, GET_VIEW_MODE, {})
         json = invoke_api(request)
-        result = Types::Player::PlayerViewMode.new(json['result'])
+        result = Types::Player::PlayerViewMode.create(json['result'])
         json['result'] = result
         KodiResponse.new(json)
       end
@@ -130,7 +130,7 @@ module KodiClient
       def seek(player_id, value, kodi_id = 1)
         request = KodiRequest.new(kodi_id, SEEK, { 'playerid' => player_id, 'value' => value })
         json = invoke_api(request)
-        result = Types::Player::SeekReturnValue.new(json['result'])
+        result = Types::Player::SeekReturned.create(json['result'])
         json['result'] = result
         KodiResponse.new(json)
       end

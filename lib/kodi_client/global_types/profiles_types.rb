@@ -20,13 +20,20 @@ module KodiClient
       class DetailsProfile
         include Comparable
         include Items::ItemDetailsBase
+        extend Creatable
 
         attr_reader :lock_mode, :thumbnail
 
-        def initialize(hash)
-          @lock_mode = hash['lockmode']
-          @thumbnail = hash['thumbnail']
-          item_details_base(hash)
+        def self.create(hash)
+          return nil if hash.nil?
+
+          new(*Creatable.hash_to_arr(hash, %w[lock_mode thumbnail label]))
+        end
+
+        def initialize(lock_mode, thumbnail, label)
+          @lock_mode = lock_mode
+          @thumbnail = thumbnail
+          item_details_base(label)
         end
 
         def ==(other)
@@ -37,32 +44,35 @@ module KodiClient
       # return type for Profiles.GetProfiles
       class GetProfilesReturned
         include Comparable
+        extend Creatable
 
         attr_reader :limits, :profiles
 
-        def initialize(hash)
-          @limits = Types::List::ListLimitsReturned.new(hash['limits'])
-          @profiles = hash['profiles'].nil? ? [] : hash['profiles'].map { |it| Types::Profiles::DetailsProfile.new(it) }
+        def self.create(hash)
+          return nil if hash.nil?
+
+          limits = Types::List::ListLimitsReturned.create(hash['limits'])
+          profiles = Types::Profiles::DetailsProfile.create_list(hash['profiles'])
+
+          new(limits, profiles)
         end
 
-        def ==(other)
-          compare(self, other)
+        def initialize(limits, profiles)
+          @limits = limits
+          @profiles = profiles
         end
       end
 
       # Profiles.Password https://kodi.wiki/view/JSON-RPC_API/v12#Profiles.Password
       class ProfilePassword
         include Comparable
+        extend Creatable
 
         attr_reader :value, :encryption
 
         def initialize(value, encryption = Types::Global::PasswordEncryption::MD5)
           @value = value
           @encryption = encryption
-        end
-
-        def ==(other)
-          compare(self, other)
         end
       end
     end

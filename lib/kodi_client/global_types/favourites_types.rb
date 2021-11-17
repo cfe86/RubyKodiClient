@@ -2,6 +2,7 @@
 
 require 'kodi_client/util/comparable'
 require 'kodi_client/util/iterable'
+require 'kodi_client/util/creatable'
 require 'kodi_client/global_types/list_types'
 
 module KodiClient
@@ -32,36 +33,36 @@ module KodiClient
       # Favourite.Details.Favourite https://kodi.wiki/view/JSON-RPC_API/v12#Favourite.Details.Favourite
       class DetailsFavourite
         include Comparable
+        extend Creatable
 
         attr_reader :path, :thumbnail, :title, :type, :window, :window_parameter
 
-        def initialize(hash)
-          @path = hash['path']
-          @thumbnail = hash['thumbnail']
-          @title = hash['title']
-          @type = hash['type']
-          @window = hash['window']
-          @window_parameter = hash['windowparameter']
-        end
-
-        def ==(other)
-          compare(self, other)
+        def initialize(path, thumbnail, title, type, window, window_parameter)
+          @path = path
+          @thumbnail = thumbnail
+          @title = title
+          @type = type
+          @window = window
+          @window_parameter = window_parameter
         end
       end
 
       # return type for Favourites.GetFavourites
       class GetFavouriteReturned
         include Comparable
+        extend Creatable
 
         attr_reader :favourites, :limits
 
-        def initialize(hash)
-          @favourites = hash['favourites'].map { |it| DetailsFavourite.new(it) }
-          @limits = Types::List::ListLimitsReturned.new(hash['limits'])
+        def self.create(hash)
+          favourites = DetailsFavourite.create_list(hash['favourites'])
+          limits = Types::List::ListLimitsReturned.create(hash['limits'])
+          new(favourites, limits)
         end
 
-        def ==(other)
-          compare(self, other)
+        def initialize(favourites, limits)
+          @favourites = favourites
+          @limits = limits
         end
       end
     end

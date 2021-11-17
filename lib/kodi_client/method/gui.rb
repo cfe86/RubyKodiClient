@@ -24,7 +24,7 @@ module KodiClient
       def get_properties(properties = Types::GUI::PropertyName.all_properties, kodi_id = 1)
         request = KodiRequest.new(kodi_id, GET_PROPERTIES, { 'properties' => properties })
         json = invoke_api(request)
-        result = json['result'].nil? ? nil : KodiClient::Types::GUI::PropertyValue.new(json['result'])
+        result = KodiClient::Types::GUI::PropertyValue.create(json['result'])
         json['result'] = result
         KodiResponse.new(json)
       end
@@ -32,7 +32,7 @@ module KodiClient
       def get_stereoscopic_modes(kodi_id = 1)
         request = KodiRequest.new(kodi_id, GET_STEREOSCOPIC_MODES, {})
         json = invoke_api(request)
-        result = json['result'].nil? ? nil : json['result']['stereoscopicmodes'].map { |it| Types::GUI::StereoscopyMode.new(it) }
+        result = Types::GUI::StereoscopyMode.create_list(json['result']['stereoscopicmodes'])
         json['result'] = result
         KodiResponse.new(json)
       end

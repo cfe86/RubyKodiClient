@@ -23,7 +23,7 @@ module KodiClient
         response = '{"id":1,"jsonrpc":"2.0","result":{"label":"Master user","lockmode":0,"thumbnail":"a thumbnail"}}'
         actual = run_test(Profiles, post, response, ->(mod) { mod.get_current_profile })
         expected_entry = { 'label' => 'Master user', 'lockmode' => 0, 'thumbnail' => 'a thumbnail' }
-        expected = create_kodi_response(1, Types::Profiles::DetailsProfile.new(expected_entry))
+        expected = create_kodi_response(1, Types::Profiles::DetailsProfile.create(expected_entry))
         assert_equal(expected, actual)
       end
 
@@ -39,7 +39,7 @@ module KodiClient
         expected_entry1 = { 'label' => 'Master user', 'lockmode' => 0, 'thumbnail' => 'a thumbnail' }
         expected_entry2 = { 'label' => 'Test', 'lockmode' => 0, 'thumbnail' => 'image://path/to/thumb.jpg' }
         expected = create_kodi_response(1,
-                                        Types::Profiles::GetProfilesReturned.new(
+                                        Types::Profiles::GetProfilesReturned.create(
                                           { 'limits' => expected_limits,
                                             'profiles' => [expected_entry1, expected_entry2] }))
         assert_equal(expected, actual)

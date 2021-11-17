@@ -4,7 +4,6 @@ module KodiClient
 
   # offers compare methods
   module Comparable
-
     def compare(obj1, obj2)
       is_same = true
       obj1.instance_variables.each do |it|
@@ -12,6 +11,10 @@ module KodiClient
       end
 
       is_same
+    end
+
+    def ==(other)
+      compare(self, other)
     end
   end
 end

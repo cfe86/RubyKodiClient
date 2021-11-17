@@ -28,27 +28,14 @@ module KodiClient
                    '"thumbnail":"","type":"kodi.audiodecoder","version":"1.1.0"}],'\
                    '"limits":{"end":2,"start":0,"total":2}}}'
         actual = run_test(Addons, post, response, ->(mod) { mod.get_addons })
-        expected_limits = { 'start' => 0, 'end' => 2, 'total' => 2 }
-        expected_dependencies = [{ 'addonid' => 'kodi.audiodecoder', 'optional' => false, 'version' => '1.0.0' }]
-        expected_addons = [{ 'addonid' => 'audiodecoder.modplug',
-                             'author' => 'spiff',
-                             'broken' => false,
-                             'dependencies' => expected_dependencies,
-                             'description' => 'Modplug Audio Decoder',
-                             'disclaimer' => '',
-                             'enabled' => false,
-                             'extrainfo' => [],
-                             'fanart' => '',
-                             'installed' => true,
-                             'name' => 'Modplug Audio Decoder',
-                             'path' => '/path/to/audiodecoder.modplug',
-                             'rating' => -1,
-                             'summary' => 'Modplug Audio Decoder',
-                             'thumbnail' => '',
-                             'type' => 'kodi.audiodecoder',
-                             'version' => '1.1.0' }]
-        expected = create_kodi_response(1, Types::Addons::Addons.new({ 'addons' => expected_addons,
-                                                                       'limits' => expected_limits }))
+        expected_limits = Types::List::ListLimitsReturned.new(0, 2, 2)
+        expected_dependencies = [Types::Addons::AddonDependency.new('kodi.audiodecoder', false, '1.0.0')]
+        expected_addons = [Types::Addons::AddonDetails.new(
+          'audiodecoder.modplug', 'spiff', false, expected_dependencies, 'Modplug Audio Decoder', '',
+          false, [], '', true, 'Modplug Audio Decoder', '/path/to/audiodecoder.modplug',
+          -1, 'Modplug Audio Decoder', '', 'kodi.audiodecoder', '1.1.0', nil
+        )]
+        expected = create_kodi_response(1, Types::Addons::Addons.new(expected_addons, expected_limits))
         assert_equal(expected, actual)
       end
 
@@ -62,25 +49,13 @@ module KodiClient
                    '"path":"/path/to/audiodecoder.modplug","rating":-1,"summary":"Modplug Audio Decoder",'\
                    '"thumbnail":"","type":"kodi.audiodecoder","version":"1.1.0"}}}'
         actual = run_test(Addons, post, response, ->(mod) { mod.get_addon_details('audiodecoder.modplug') })
-        expected_dependencies = [{ 'addonid' => 'kodi.audiodecoder', 'optional' => false, 'version' => '1.0.0' }]
-        expected_addon = { 'addonid' => 'audiodecoder.modplug',
-                           'author' => 'spiff',
-                           'broken' => false,
-                           'dependencies' => expected_dependencies,
-                           'description' => 'Modplug Audio Decoder',
-                           'disclaimer' => '',
-                           'enabled' => false,
-                           'extrainfo' => [],
-                           'fanart' => '',
-                           'installed' => true,
-                           'name' => 'Modplug Audio Decoder',
-                           'path' => '/path/to/audiodecoder.modplug',
-                           'rating' => -1,
-                           'summary' => 'Modplug Audio Decoder',
-                           'thumbnail' => '',
-                           'type' => 'kodi.audiodecoder',
-                           'version' => '1.1.0' }
-        expected = create_kodi_response(1, Types::Addons::Addon.new({ 'addon' => expected_addon }), nil, nil)
+        expected_dependencies = [Types::Addons::AddonDependency.new('kodi.audiodecoder', false, '1.0.0')]
+        expected_addon = Types::Addons::AddonDetails.new(
+          'audiodecoder.modplug', 'spiff', false, expected_dependencies, 'Modplug Audio Decoder', '',
+          false, [], '', true, 'Modplug Audio Decoder', '/path/to/audiodecoder.modplug',
+          -1, 'Modplug Audio Decoder', '', 'kodi.audiodecoder', '1.1.0', nil
+        )
+        expected = create_kodi_response(1, Types::Addons::Addon.new(expected_addon), nil, nil)
         assert_equal(expected, actual)
       end
 

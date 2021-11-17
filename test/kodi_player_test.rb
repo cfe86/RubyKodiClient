@@ -37,7 +37,7 @@ module KodiClient
         post = '{"jsonrpc":"2.0","id":1,"method":"Player.GetActivePlayers", "params": {}}'
         response = '{"id":1,"jsonrpc":"2.0", "result":[{"playerid":1,"playertype":"internal","type":"video"}]}'
         actual = run_test(Player, post, response, ->(mod) { mod.get_active_players })
-        expected = create_kodi_response(1, [Types::Player::Player.new({ 'playerid' => 1,
+        expected = create_kodi_response(1, [Types::Player::Player.create({ 'playerid' => 1,
                                                                         'playertype' => 'internal',
                                                                         'type' => 'video' })])
         assert_equal(expected, actual)
@@ -75,7 +75,7 @@ module KodiClient
                             'studio' => [], 'tag' => [], 'tagline' => '', 'thumbnail' => '', 'title' => '',
                             'top250' => 0, 'track' => -1, 'trailer' => '', 'tvshowid' => -1, 'type' => 'unknown',
                             'userrating' => 0, 'votes' => '0', 'writer' => [], 'year' => 1601 }
-        expected = create_kodi_response(1, Types::List::ListItemAll.new(expected_result))
+        expected = create_kodi_response(1, Types::List::ListItemAll.create(expected_result))
         assert_equal(expected, actual)
       end
 
@@ -86,7 +86,7 @@ module KodiClient
         actual = run_test(Player, post, response, ->(mod) { mod.get_players })
         expected_players = [{ 'name' => 'VideoPlayer', 'playsaudio' => true, 'playsvideo' => true, 'type' => 'video' },
                             { 'name' => 'PAPlayer', 'playsaudio' => true, 'playsvideo' => false, 'type' => 'music' }]
-        expected = create_kodi_response(1, expected_players.map { |it| Types::Player::Player.new(it) })
+        expected = create_kodi_response(1, expected_players.map { |it| Types::Player::Player.create(it) })
         assert_equal(expected, actual)
       end
 
@@ -129,7 +129,7 @@ module KodiClient
                               'type' => 'video', 'videostreams' => [{ 'codec' => 'h264', 'height' => 534, 'index' => 0,
                                                                       'language' => '', 'name' => '',
                                                                       'width' => 1280 }] }
-        expected = create_kodi_response(1, Types::Player::PropertyValue.new(expected_property))
+        expected = create_kodi_response(1, Types::Player::PropertyValue.create(expected_property))
         assert_equal(expected, actual)
       end
 
@@ -140,7 +140,7 @@ module KodiClient
         actual = run_test(Player, post, response, ->(mod) { mod.get_view_mode })
         expected_result = { 'nonlinearstretch' => false, 'pixelratio' => 1.0, 'verticalshift' => 0.0,
                             'viewed' => 'normal', 'zoom' => 1.0 }
-        expected = create_kodi_response(1, Types::Player::PlayerViewMode.new(expected_result))
+        expected = create_kodi_response(1, Types::Player::PlayerViewMode.create(expected_result))
         assert_equal(expected, actual)
       end
 
@@ -185,7 +185,7 @@ module KodiClient
         expected_result = { 'percentage' => 56.11011505126953125, 
                             'time' => { 'hours' => 1, 'milliseconds' => 1, 'minutes' => 1, 'seconds' => 1},
                             'totaltime' => { 'hours' => 1, 'milliseconds' => 672, 'minutes' => 48, 'seconds' => 44 } }
-        expected = create_kodi_response(1, Types::Player::SeekReturnValue.new(expected_result))
+        expected = create_kodi_response(1, Types::Player::SeekReturned.create(expected_result))
         assert_equal(expected, actual)
       end
 

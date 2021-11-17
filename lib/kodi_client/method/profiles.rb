@@ -15,7 +15,7 @@ module KodiClient
       def get_current_profile(properties = Types::Profiles::FieldsProfile.all_properties, kodi_id = 1)
         request = KodiRequest.new(kodi_id, GET_CURRENT_PROFILE, { 'properties' => properties })
         json = invoke_api(request)
-        result = json['result'].nil? ? nil : Types::Profiles::DetailsProfile.new(json['result'])
+        result = Types::Profiles::DetailsProfile.create(json['result'])
         json['result'] = result
         KodiResponse.new(json)
       end
@@ -30,7 +30,7 @@ module KodiClient
                                                 'order' => sort.order,
                                                 'useartistsortname' => sort.use_artist_sort_name } })
         json = invoke_api(request)
-        result = json['result'].nil? ? nil : Types::Profiles::GetProfilesReturned.new(json['result'])
+        result = Types::Profiles::GetProfilesReturned.create(json['result'])
         json['result'] = result
         KodiResponse.new(json)
       end
