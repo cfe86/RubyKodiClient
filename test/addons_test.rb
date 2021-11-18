@@ -12,7 +12,7 @@ module KodiClient
         post = '{"jsonrpc":"2.0","id":1,"method":"Addons.GetAddons", "params": {"type":"unknown","content":"unknown",'\
                '"enabled":"all","properties":[],"limits":{"start":0,"end":50},"installed":"all"}}'
         response = '{"error":{"code":-32601,"message":"Method not found."},"id":1,"jsonrpc":"2.0"}'
-        actual = run_test(Addons, post, response, ->(mod) { mod.get_addons })
+        actual = run_test('addons', post, response, ->(mod) { mod.get_addons })
         expected = create_kodi_response(1, nil, -32_601, 'Method not found.')
         assert_equal(expected, actual)
       end
@@ -27,7 +27,7 @@ module KodiClient
                    '"path":"/path/to/audiodecoder.modplug","rating":-1,"summary":"Modplug Audio Decoder",'\
                    '"thumbnail":"","type":"kodi.audiodecoder","version":"1.1.0"}],'\
                    '"limits":{"end":2,"start":0,"total":2}}}'
-        actual = run_test(Addons, post, response, ->(mod) { mod.get_addons })
+        actual = run_test('addons', post, response, ->(mod) { mod.get_addons })
         expected_limits = Types::List::ListLimitsReturned.new(0, 2, 2)
         expected_dependencies = [Types::Addons::AddonDependency.new('kodi.audiodecoder', false, '1.0.0')]
         expected_addons = [Types::Addons::AddonDetails.new(
@@ -48,7 +48,7 @@ module KodiClient
                    '"extrainfo":[],"fanart":"","installed":true,"name":"Modplug Audio Decoder",'\
                    '"path":"/path/to/audiodecoder.modplug","rating":-1,"summary":"Modplug Audio Decoder",'\
                    '"thumbnail":"","type":"kodi.audiodecoder","version":"1.1.0"}}}'
-        actual = run_test(Addons, post, response, ->(mod) { mod.get_addon_details('audiodecoder.modplug') })
+        actual = run_test('addons', post, response, ->(mod) { mod.get_addon_details('audiodecoder.modplug') })
         expected_dependencies = [Types::Addons::AddonDependency.new('kodi.audiodecoder', false, '1.0.0')]
         expected_addon = Types::Addons::AddonDetails.new(
           'audiodecoder.modplug', 'spiff', false, expected_dependencies, 'Modplug Audio Decoder', '',
@@ -63,7 +63,7 @@ module KodiClient
         post = '{"jsonrpc":"2.0","id":1,"method":"Addons.ExecuteAddon", "params": {"addonid":"audiodecoder.modplug",'\
                '"wait":false,"params":"?a_url"}}'
         response = '{"id":1,"jsonrpc":"2.0","result":"OK"}'
-        actual = run_test(Addons, post, response, ->(mod) { mod.execute_addon('audiodecoder.modplug', '?a_url') })
+        actual = run_test('addons', post, response, ->(mod) { mod.execute_addon('audiodecoder.modplug', '?a_url') })
         expected = create_kodi_response(1, 'OK')
         assert_equal(expected, actual)
       end
@@ -72,7 +72,7 @@ module KodiClient
         post = '{"jsonrpc":"2.0","id":1,"method":"Addons.SetAddonEnabled",'\
                '"params": {"addonid":"modplug","enabled":"toggle"}}'
         response = '{"id":1,"jsonrpc":"2.0","result":"OK"}'
-        actual = run_test(Addons, post, response, ->(mod) { mod.set_addon_enabled('modplug', 'toggle') })
+        actual = run_test('addons', post, response, ->(mod) { mod.set_addon_enabled('modplug', 'toggle') })
         expected = create_kodi_response(1, 'OK')
         assert_equal(expected, actual)
       end

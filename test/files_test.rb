@@ -21,7 +21,7 @@ module KodiClient
                '"uniqueid","votes","watchedepisodes","writer","year"],"sort":{"ignorearticle":false,"method":"none",'\
                '"order":"ascending","useartistsortname":false},"limits":{"start":0,"end":50}}}'
         response = '{"error":{"code":-32601,"message":"Method not found."},"id":1,"jsonrpc":"2.0"}'
-        actual = run_test(Files, post, response, ->(mod) { mod.get_directory('/path/to/file') })
+        actual = run_test('files', post, response, ->(mod) { mod.get_directory('/path/to/file') })
         expected = create_kodi_response(1, nil, -32_601, 'Method not found.')
         assert_equal(expected, actual)
       end
@@ -75,7 +75,7 @@ module KodiClient
                                                         nil, '', nil, nil, '', '', 'Label2',
                                                         nil, nil, nil, nil, nil, nil, nil,
                                                         nil, nil)]
-        actual = run_test(Files, post, response, ->(mod) { mod.get_directory('/path/to/file') })
+        actual = run_test('files', post, response, ->(mod) { mod.get_directory('/path/to/file') })
         expected = create_kodi_response(1, Types::Files::GetDirectoryReturned.new(expected_files, expected_limits))
         assert_equal(expected, actual)
       end
@@ -109,7 +109,7 @@ module KodiClient
                                                       nil, '', nil, nil, '', '', 'Label1',
                                                       nil, nil, nil, nil, nil, nil, nil,
                                                       nil, nil)
-        actual = run_test(Files, post, response, ->(mod) { mod.get_file_details('/path/to/file') })
+        actual = run_test('files', post, response, ->(mod) { mod.get_file_details('/path/to/file') })
         expected = create_kodi_response(1, expected_file)
         assert_equal(expected, actual)
       end
@@ -124,7 +124,7 @@ module KodiClient
         expected_limits = Types::List::ListLimitsReturned.new(0, 2, 2)
         expected_sources = [Types::List::FileLabel.new('upnp://5b36/f137/', 'Emby123'),
                             Types::List::FileLabel.new('/path/to/file', 'movies')]
-        actual = run_test(Files, post, response, ->(mod) { mod.get_sources })
+        actual = run_test('files', post, response, ->(mod) { mod.get_sources })
         expected = create_kodi_response(1, Types::Files::GetSourcesReturned.new(expected_sources, expected_limits))
         assert_equal(expected, actual)
       end
@@ -135,7 +135,7 @@ module KodiClient
                    '"mode":"redirect","protocol":"http"}}'
         expected_result = Types::Files::PrepareDownloadReturned.new({ 'path' => 'vfs/random/path/to/file.mkv' },
                                                                     'redirect', 'http')
-        actual = run_test(Files, post, response, ->(mod) { mod.prepare_download('/path/to/file') })
+        actual = run_test('files', post, response, ->(mod) { mod.prepare_download('/path/to/file') })
         expected = create_kodi_response(1, expected_result)
         assert_equal(expected, actual)
       end
@@ -144,7 +144,7 @@ module KodiClient
         post = '{"id":1,"jsonrpc":"2.0","method":"Files.SetFileDetails",'\
                '"params":{"file":"/path/to/file", "media": "video"}}'
         response = '{"id":1,"jsonrpc":"2.0","result":"OK"}'
-        actual = run_test(Files, post, response, ->(mod) { mod.set_file_details('/path/to/file') })
+        actual = run_test('files', post, response, ->(mod) { mod.set_file_details('/path/to/file') })
         expected = create_kodi_response(1, 'OK')
         assert_equal(expected, actual)
       end

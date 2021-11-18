@@ -12,7 +12,7 @@ module KodiClient
         post = '{"jsonrpc":"2.0","id":1,"method":"Profiles.GetCurrentProfile",'\
                '"params": {"properties":["lockmode", "thumbnail"]}}'
         response = '{"error":{"code":-32601,"message":"Method not found."},"id":1,"jsonrpc":"2.0"}'
-        actual = run_test(Profiles, post, response, ->(mod) { mod.get_current_profile })
+        actual = run_test('profiles', post, response, ->(mod) { mod.get_current_profile })
         expected = create_kodi_response(1, nil, -32_601, 'Method not found.')
         assert_equal(expected, actual)
       end
@@ -21,7 +21,7 @@ module KodiClient
         post = '{"jsonrpc":"2.0","id":1,"method":"Profiles.GetCurrentProfile", '\
                '"params": {"properties":["lockmode", "thumbnail"]}}'
         response = '{"id":1,"jsonrpc":"2.0","result":{"label":"Master user","lockmode":0,"thumbnail":"a thumbnail"}}'
-        actual = run_test(Profiles, post, response, ->(mod) { mod.get_current_profile })
+        actual = run_test('profiles', post, response, ->(mod) { mod.get_current_profile })
         expected_result = Types::Profiles::DetailsProfile.new(0, 'a thumbnail', 'Master user')
         expected = create_kodi_response(1, expected_result)
         assert_equal(expected, actual)
@@ -34,7 +34,7 @@ module KodiClient
         response = '{"id":1,"jsonrpc":"2.0","result":{"limits":{"end":2,"start":0,"total":2},'\
                    '"profiles":[{"label":"Master user","lockmode":0,"thumbnail":"a thumbnail"},'\
                    '{"label":"Test","lockmode":0,"thumbnail":"image://path/to/thumb.jpg"}]}}'
-        actual = run_test(Profiles, post, response, ->(mod) { mod.get_profiles })
+        actual = run_test('profiles', post, response, ->(mod) { mod.get_profiles })
         expected_limits = Types::List::ListLimitsReturned.new(0, 2, 2)
         expected_profiles = [Types::Profiles::DetailsProfile.new(0, 'a thumbnail', 'Master user'),
                              Types::Profiles::DetailsProfile.new(0, 'image://path/to/thumb.jpg', 'Test')]
@@ -48,7 +48,7 @@ module KodiClient
                '"password": {"value":"pw_val", "encryption":"md5"}, "prompt": false}}'
         response = '{"id":1,"jsonrpc":"2.0","result":"OK"}'
         pw = Types::Profiles::ProfilePassword.new('pw_val')
-        actual = run_test(Profiles, post, response, ->(mod) { mod.load_profile('my profile', pw) })
+        actual = run_test('profiles', post, response, ->(mod) { mod.load_profile('my profile', pw) })
         expected = create_kodi_response(1, 'OK')
         assert_equal(expected, actual)
       end

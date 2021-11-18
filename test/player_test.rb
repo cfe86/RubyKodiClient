@@ -11,7 +11,7 @@ module KodiClient
       def test_error
         post = '{"jsonrpc":"2.0","id":1,"method":"Player.Open", "params": {"item":{"file":"file_url"},"options":{}}}'
         response = '{"error":{"code":-32601,"message":"Method not found."},"id":1,"jsonrpc":"2.0"}'
-        actual = run_test(Player, post, response, ->(mod) { mod.player_open('file_url') })
+        actual = run_test('player', post, response, ->(mod) { mod.player_open('file_url') })
         expected = create_kodi_response(1, nil, -32_601, 'Method not found.')
         assert_equal(expected, actual)
       end
@@ -20,7 +20,7 @@ module KodiClient
         post = '{"jsonrpc":"2.0","id":1,"method":"Player.AddSubtitle",'\
                '"params": {"playerid":1,"subtitle":"path/to/subtitle"}}'
         response = '{"id":1,"jsonrpc":"2.0","result": "OK"}'
-        actual = run_test(Player, post, response, ->(mod) { mod.add_subtitle(1, 'path/to/subtitle') })
+        actual = run_test('player', post, response, ->(mod) { mod.add_subtitle(1, 'path/to/subtitle') })
         expected = create_kodi_response(1, 'OK')
         assert_equal(expected, actual)
       end
@@ -28,7 +28,7 @@ module KodiClient
       def test_player_open
         post = '{"jsonrpc":"2.0","id":1,"method":"Player.Open", "params": {"item":{"file":"file_url"},"options":{}}}'
         response = '{"id":1,"jsonrpc":"2.0","result": "OK"}'
-        actual = run_test(Player, post, response, ->(mod) { mod.player_open('file_url') })
+        actual = run_test('player', post, response, ->(mod) { mod.player_open('file_url') })
         expected = create_kodi_response(1, 'OK')
         assert_equal(expected, actual)
       end
@@ -36,7 +36,7 @@ module KodiClient
       def test_get_active_players
         post = '{"jsonrpc":"2.0","id":1,"method":"Player.GetActivePlayers", "params": {}}'
         response = '{"id":1,"jsonrpc":"2.0", "result":[{"playerid":1,"playertype":"internal","type":"video"}]}'
-        actual = run_test(Player, post, response, ->(mod) { mod.get_active_players })
+        actual = run_test('player', post, response, ->(mod) { mod.get_active_players })
         expected_player = Types::Player::Player.new(1, 'internal', 'video', nil, nil, nil)
         expected = create_kodi_response(1, [expected_player])
         assert_equal(expected, actual)
@@ -56,7 +56,7 @@ module KodiClient
                    '"language":"","stereomode":"","width":720}]},"studio":[],"tag":[],"tagline":"","thumbnail":"",'\
                    '"title":"","top250":0,"track":-1,"trailer":"","tvshowid":-1,"type":"unknown","userrating":0,'\
                    '"votes":"0","writer":[],"year":1601}}}'
-        actual = run_test(Player, post, response, ->(mod) { mod.get_item(1, [Types::List::ListFieldsAll::ALBUM]) })
+        actual = run_test('player', post, response, ->(mod) { mod.get_item(1, [Types::List::ListFieldsAll::ALBUM]) })
         expected_audio_stream = Types::Player::AudioStream.new(nil, 6, 'ac3', nil, nil, nil, nil, '', nil, nil)
         expected_video_stream = Types::Player::VideoStream.new('mpeg4', 304, nil, '', nil,
                                                                720, 8037, 2.3684210777282714844)
@@ -86,7 +86,7 @@ module KodiClient
         post = '{"jsonrpc":"2.0","id":1,"method":"Player.GetPlayers", "params": {"media":"all"}}'
         response = '{"id":1,"jsonrpc":"2.0","result":[{"name":"VideoPlayer","playsaudio":true,"playsvideo":true,'\
                    '"type":"video"},{"name":"PAPlayer","playsaudio":true,"playsvideo":false,"type":"music"}]}'
-        actual = run_test(Player, post, response, ->(mod) { mod.get_players })
+        actual = run_test('player', post, response, ->(mod) { mod.get_players })
         Types::Player::Player.new(nil, nil, 'video', 'VideoPlayer', true, true)
         expected_players = [Types::Player::Player.new(nil, nil, 'video', 'VideoPlayer', true, true),
                             Types::Player::Player.new(nil, nil, 'music', 'PAPlayer', true, false)]
@@ -112,7 +112,7 @@ module KodiClient
                    '"time":{"hours":0,"milliseconds":129,"minutes":0,"seconds":9},"totaltime":{"hours":1,'\
                    '"milliseconds":672,"minutes":48,"seconds":44},"type":"video","videostreams":[{"codec":"h264",'\
                    '"height":534,"index":0,"language":"","name":"","width":1280}]}}'
-        actual = run_test(Player, post, response, ->(mod) { mod.get_properties(1) })
+        actual = run_test('player', post, response, ->(mod) { mod.get_properties(1) })
         expected_audio_streams = [Types::Player::AudioStream.new(446_087, 6, 'ac3', 0,
                                                                  nil, nil, nil, 'ger', 'AC3 5.1', nil)]
         expected_curr_audio_stream = Types::Player::AudioStream.new(446_087, 6, 'ac3', 0,
@@ -139,7 +139,7 @@ module KodiClient
         post = '{"jsonrpc":"2.0","id":1,"method":"Player.GetViewMode", "params": {}}'
         response = '{"id":1,"jsonrpc":"2.0","result":{"nonlinearstretch":false,"pixelratio":1.0,'\
                    '"verticalshift":0.0,"viewmode":"normal","zoom":1.0}}'
-        actual = run_test(Player, post, response, ->(mod) { mod.get_view_mode })
+        actual = run_test('player', post, response, ->(mod) { mod.get_view_mode })
         expected_result = Types::Player::PlayerViewMode.new(false, 1.0, 0.0, 'normal', 1.0)
         expected = create_kodi_response(1, expected_result)
         assert_equal(expected, actual)
@@ -148,7 +148,7 @@ module KodiClient
       def test_go_to
         post = '{"jsonrpc":"2.0","id":1,"method":"Player.GoTo", "params": {"playerid": 1, "to": "next"}}'
         response = '{"id":1,"jsonrpc":"2.0","result": "OK"}'
-        actual = run_test(Player, post, response, ->(mod) { mod.go_to(1) })
+        actual = run_test('player', post, response, ->(mod) { mod.go_to(1) })
         expected = create_kodi_response(1, 'OK')
         assert_equal(expected, actual)
       end
@@ -156,7 +156,7 @@ module KodiClient
       def test_move
         post = '{"jsonrpc":"2.0","id":1,"method":"Player.Move", "params": {"playerid": 1, "direction": "up"}}'
         response = '{"id":1,"jsonrpc":"2.0","result": "OK"}'
-        actual = run_test(Player, post, response, ->(mod) { mod.move(1) })
+        actual = run_test('player', post, response, ->(mod) { mod.move(1) })
         expected = create_kodi_response(1, 'OK')
         assert_equal(expected, actual)
       end
@@ -164,7 +164,7 @@ module KodiClient
       def test_rotate
         post = '{"jsonrpc":"2.0","id":1,"method":"Player.Rotate", "params": {"playerid": 1, "value": "clockwise"}}'
         response = '{"id":1,"jsonrpc":"2.0","result": "OK"}'
-        actual = run_test(Player, post, response, ->(mod) { mod.rotate(1) })
+        actual = run_test('player', post, response, ->(mod) { mod.rotate(1) })
         expected = create_kodi_response(1, 'OK')
         assert_equal(expected, actual)
       end
@@ -172,7 +172,7 @@ module KodiClient
       def test_play_pause
         post = '{"jsonrpc":"2.0","id":1,"method":"Player.PlayPause", "params": {"playerid": 1, "play": "toggle"}}'
         response = '{"id":1,"jsonrpc":"2.0","result":{"speed":1}}'
-        actual = run_test(Player, post, response, ->(mod) { mod.play_pause(1) })
+        actual = run_test('player', post, response, ->(mod) { mod.play_pause(1) })
         expected = create_kodi_response(1, 1)
         assert_equal(expected, actual)
       end
@@ -182,7 +182,7 @@ module KodiClient
         response = '{"id":1,"jsonrpc":"2.0","result":{"percentage":56.11011505126953125,"time":{"hours":1,'\
                    '"milliseconds":1,"minutes":1,"seconds":1},"totaltime":{"hours":1,"milliseconds":672,'\
                    '"minutes":48,"seconds":44}}}'
-        actual = run_test(Player, post, response, ->(mod) { mod.seek(1, 56.11) })
+        actual = run_test('player', post, response, ->(mod) { mod.seek(1, 56.11) })
         expected_time = Types::Global::GlobalTime.new(1, 1, 1, 1)
         expected_total_time = Types::Global::GlobalTime.new(1, 48, 44, 672)
         expected_result = Types::Player::SeekReturned.new(56.11011505126953125, expected_time, expected_total_time)
@@ -193,7 +193,7 @@ module KodiClient
       def test_set_audio_stream
         post = '{"jsonrpc":"2.0","id":1,"method":"Player.SetAudioStream", "params": {"playerid": 1, "stream": 1}}'
         response = '{"id":1,"jsonrpc":"2.0","result": "OK"}'
-        actual = run_test(Player, post, response, ->(mod) { mod.set_audio_stream(1, 1) })
+        actual = run_test('player', post, response, ->(mod) { mod.set_audio_stream(1, 1) })
         expected = create_kodi_response(1, 'OK')
         assert_equal(expected, actual)
       end
@@ -202,7 +202,7 @@ module KodiClient
         post = '{"jsonrpc":"2.0","id":1,"method":"Player.SetPartymode", "params": {"playerid": 1,'\
                '"partymode": "toggle"}}'
         response = '{"id":1,"jsonrpc":"2.0","result": "OK"}'
-        actual = run_test(Player, post, response, ->(mod) { mod.set_party_mode(1, Types::Global::Toggle::TOGGLE) })
+        actual = run_test('player', post, response, ->(mod) { mod.set_party_mode(1, Types::Global::Toggle::TOGGLE) })
         expected = create_kodi_response(1, 'OK')
         assert_equal(expected, actual)
       end
@@ -211,7 +211,7 @@ module KodiClient
         post = '{"jsonrpc":"2.0","id":1,"method":"Player.SetRepeat", "params": {"playerid": 1,'\
                '"repeat": "all"}}'
         response = '{"id":1,"jsonrpc":"2.0","result": "OK"}'
-        actual = run_test(Player, post, response, ->(mod) { mod.set_repeat(1, Types::Player::PlayerRepeat::ALL) })
+        actual = run_test('player', post, response, ->(mod) { mod.set_repeat(1, Types::Player::PlayerRepeat::ALL) })
         expected = create_kodi_response(1, 'OK')
         assert_equal(expected, actual)
       end
@@ -220,7 +220,7 @@ module KodiClient
         post = '{"jsonrpc":"2.0","id":1,"method":"Player.SetSpeed", "params": {"playerid": 1,'\
                '"speed": "increment"}}'
         response = '{"id":1,"jsonrpc":"2.0","result": { "speed": 2}}'
-        actual = run_test(Player, post, response, ->(mod) { mod.set_speed(1, 'increment') })
+        actual = run_test('player', post, response, ->(mod) { mod.set_speed(1, 'increment') })
         expected = create_kodi_response(1, 2)
         assert_equal(expected, actual)
       end
@@ -229,7 +229,7 @@ module KodiClient
         post = '{"jsonrpc":"2.0","id":1,"method":"Player.SetSubtitle", "params": {"playerid": 1,'\
                '"subtitle": "next", "enabled" : false}}'
         response = '{"id":1,"jsonrpc":"2.0","result": "OK"}'
-        actual = run_test(Player, post, response, ->(mod) { mod.set_subtitle(1, 'next') })
+        actual = run_test('player', post, response, ->(mod) { mod.set_subtitle(1, 'next') })
         expected = create_kodi_response(1, 'OK')
         assert_equal(expected, actual)
       end
@@ -237,7 +237,7 @@ module KodiClient
       def test_set_video_stream
         post = '{"jsonrpc":"2.0","id":1,"method":"Player.SetVideoStream", "params": {"playerid": 1, "stream": 1}}'
         response = '{"id":1,"jsonrpc":"2.0","result": "OK"}'
-        actual = run_test(Player, post, response, ->(mod) { mod.set_video_stream(1, 1) })
+        actual = run_test('player', post, response, ->(mod) { mod.set_video_stream(1, 1) })
         expected = create_kodi_response(1, 'OK')
         assert_equal(expected, actual)
       end
@@ -245,7 +245,7 @@ module KodiClient
       def test_set_view_mode
         post = '{"jsonrpc":"2.0","id":1,"method":"Player.SetViewMode", "params": {"playerid": 1, "viewmode": "normal"}}'
         response = '{"id":1,"jsonrpc":"2.0","result": "OK"}'
-        actual = run_test(Player, post, response, ->(mod) { mod.set_view_mode(1, Types::Player::ViewMode::NORMAL) })
+        actual = run_test('player', post, response, ->(mod) { mod.set_view_mode(1, Types::Player::ViewMode::NORMAL) })
         expected = create_kodi_response(1, 'OK')
         assert_equal(expected, actual)
       end
@@ -253,7 +253,7 @@ module KodiClient
       def test_stop
         post = '{"jsonrpc":"2.0","id":1,"method":"Player.Stop", "params": {"playerid": 1}}'
         response = '{"id":1,"jsonrpc":"2.0","result": "OK"}'
-        actual = run_test(Player, post, response, ->(mod) { mod.stop(1) })
+        actual = run_test('player', post, response, ->(mod) { mod.stop(1) })
         expected = create_kodi_response(1, 'OK')
         assert_equal(expected, actual)
       end
@@ -261,7 +261,7 @@ module KodiClient
       def test_zoom
         post = '{"jsonrpc":"2.0","id":1,"method":"Player.Zoom", "params": {"playerid": 1, "zoom": 4}}'
         response = '{"id":1,"jsonrpc":"2.0","result": "OK"}'
-        actual = run_test(Player, post, response, ->(mod) { mod.zoom(1, 4) })
+        actual = run_test('player', post, response, ->(mod) { mod.zoom(1, 4) })
         expected = create_kodi_response(1, 'OK')
         assert_equal(expected, actual)
       end

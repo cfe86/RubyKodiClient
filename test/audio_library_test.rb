@@ -11,7 +11,7 @@ module KodiClient
       def test_error
         post = '{"jsonrpc":"2.0","id":1,"method":"AudioLibrary.Clean", "params": {"showdialogs":true}}'
         response = '{"id":1,"jsonrpc":"2.0","error":{"code":-32601,"message":"Method not found."}}'
-        actual = run_test(AudioLibrary, post, response, ->(mod) { mod.clean })
+        actual = run_test('audio_library', post, response, ->(mod) { mod.clean })
         expected = create_kodi_response(1, nil, -32_601, 'Method not found.')
         assert_equal(expected, actual)
       end
@@ -19,7 +19,7 @@ module KodiClient
       def test_clean
         post = '{"jsonrpc":"2.0","id":1,"method":"AudioLibrary.Clean", "params": {"showdialogs":true}}'
         response = '{"id":1,"jsonrpc":"2.0","result":"OK"}'
-        actual = run_test(AudioLibrary, post, response, ->(mod) { mod.clean })
+        actual = run_test('audio_library', post, response, ->(mod) { mod.clean })
         expected = create_kodi_response(1, 'OK')
         assert_equal(expected, actual)
       end
@@ -28,7 +28,7 @@ module KodiClient
         post = '{"jsonrpc":"2.0","id":1,"method":"AudioLibrary.Export",'\
                '"params": {"options": {"path":"/path/to/folder"}}}'
         response = '{"id":1,"jsonrpc":"2.0","result":"OK"}'
-        actual = run_test(AudioLibrary, post, response, ->(mod) { mod.export('/path/to/folder') })
+        actual = run_test('audio_library', post, response, ->(mod) { mod.export('/path/to/folder') })
         expected = create_kodi_response(1, 'OK')
         assert_equal(expected, actual)
       end

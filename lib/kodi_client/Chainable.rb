@@ -9,6 +9,7 @@ module KodiClient
     attr_accessor :options, :client
 
     def connect(ip, port)
+      @client = KodiClient::Client.new
       merge_options(->(options) { options.with_connection(ip, port) })
     end
 

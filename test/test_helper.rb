@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'kodi_client'
 require 'kodi_client/method/application'
 require 'kodi_client/method/audio_library'
 require 'kodi_client/method/addons'
@@ -21,6 +22,7 @@ require 'kodi_client/options'
 
 module KodiClient
   module Test
+
     class MockHttpClient < Minitest::Test
 
       def initialize(post, response)
@@ -46,9 +48,10 @@ module KodiClient
 
     def run_test(kodi_module, post, response, method)
       HTTP::Client.stub :new, MockHttpClient.new(post, response) do
-        client = kodi_module.new
-        client.apply_options(KodiClient::Options.new)
-        method.call(client)
+        client = KodiClient.connect('127.0.0.1', 8080)
+        client.apply_options_to_methods(KodiClient::Options.new)
+        mod = client.instance_variable_get("@#{kodi_module}")
+        method.call(mod)
       end
     end
   end
