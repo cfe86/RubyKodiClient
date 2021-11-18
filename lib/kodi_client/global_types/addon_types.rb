@@ -118,16 +118,18 @@ module KodiClient
         attr_reader :addon_id, :author, :broken, :dependencies, :description, :disclaimer, :enabled, :extra_info,
                     :fan_art, :installed, :name, :path, :rating, :summary, :thumbnail, :type, :version
 
+        def self.type_mapping
+          { 'dependencies' => Creatable::CreateMap.new(AddonDependency, true),
+            'extrainfo' => Creatable::CreateMap.new(AddonExtraInfo, true) }
+        end
+
         def self.create(hash)
           return nil if hash.nil?
 
-          dependencies = AddonDependency.create_list(hash['dependencies'])
-          extra_info = AddonExtraInfo.create_list(hash['extrainfo'])
-
-          new(hash['addonid'], hash['author'], hash['broken'], dependencies, hash['description'], hash['disclaimer'],
-              hash['enabled'], extra_info, hash['fanart'], hash['installed'], hash['name'], hash['path'],
-              hash['rating'], hash['summary'], hash['thumbnail'], hash['type'], hash['version'],
-              *hash_to_arr(hash, ['label']))
+          new(*Creatable.hash_to_arr(
+            hash, %w[addon_id author broken dependencies description disclaimer enabled extra_info
+                     fan_art installed name path rating summary thumbnail type version label], type_mapping
+          ))
         end
 
         def initialize(addon_id, author, broken, dependencies, description, disclaimer, enabled, extra_info,
@@ -159,12 +161,17 @@ module KodiClient
 
         attr_reader :addons, :limits
 
+        def self.type_mapping
+          { 'addons' => Creatable::CreateMap.new(AddonDetails, true),
+            'limits' => Creatable::CreateMap.new(List::ListLimitsReturned) }
+        end
+
         def self.create(hash)
           return nil if hash.nil?
 
-          addons = AddonDetails.create_list(hash['addons'])
-          limits = List::ListLimitsReturned.create(hash['limits'])
-          new(addons, limits)
+          new(*Creatable.hash_to_arr(
+            hash, %w[addons limits], type_mapping
+          ))
         end
 
         def initialize(addons, limits)
