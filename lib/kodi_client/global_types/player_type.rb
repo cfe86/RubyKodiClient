@@ -195,35 +195,20 @@ module KodiClient
                     :live, :party_mode, :percentage, :playlist_id, :position, :repeat, :shuffled, :speed,
                     :subtitle_enabled, :subtitles, :time, :total_time, :type, :video_streams
 
-        def self.create(hash)
-          return nil if hash.nil?
-
-          audio_streams = AudioStream.create_list(hash['audiostreams'])
-          current_audio_stream = AudioStream.create(hash['currentaudiostream'])
-          current_subtitle = Subtitle.create(hash['currentsubtitle'])
-          current_video_stream = VideoStream.create(hash['currentvideostream'])
-          subtitles = Subtitle.create_list(hash['subtitles'])
-          time = Types::Global::GlobalTime.create(hash['time'])
-          total_time = Types::Global::GlobalTime.create(hash['totaltime'])
-          video_streams = VideoStream.create_list(hash['videostreams'])
-
-          hash['type'] = PlayerType::VIDEO if hash['type'].nil?
-          hash['playlistid'] = -1 if hash['playlistid'].nil?
-          hash['position'] = -1 if hash['position'].nil?
-          hash['repeat'] = PlayerRepeat::OFF if hash['repeat'].nil?
-
-          new(audio_streams, *Creatable.hash_to_arr(hash, %w[cache_percentage can_change_speed can_move
-                                                             can_repeat can_rotate can_seek can_shuffle can_zoom]),
-              current_audio_stream, current_subtitle, current_video_stream,
-              *Creatable.hash_to_arr(hash, %w[live party_mode percentage playlist_id position repeat
-                                              shuffled speed subtitle_enabled]), subtitles, time, total_time,
-              hash['type'], video_streams)
-        end
+        type_mapping ['audiostreams', AudioStream, true], ['currentaudiostream', AudioStream],
+                     ['currentsubtitle', Subtitle], ['currentvideostream', VideoStream],
+                     ['subtitles', Subtitle, true], ['time', Global::GlobalTime],
+                     ['totaltime', Global::GlobalTime], ['videostreams', VideoStream, true]
 
         def initialize(audio_streams, cache_percentage, can_change_speed, can_move, can_repeat, can_rotate, can_seek,
                        can_shuffle, can_zoom, current_audio_stream, current_subtitle, current_video_stream, live,
                        party_mode, percentage, playlist_id, position, repeat, shuffled, speed,
                        subtitle_enabled, subtitles, time, total_time, type, video_streams)
+          type = type.nil? ? PlayerType::VIDEO : type
+          playlist_id = playlist_id.nil? ? -1 : playlist_id
+          position = position.nil? ? -1 : position
+          repeat = repeat.nil? ? PlayerRepeat::OFF : repeat
+
           @audio_streams = audio_streams
           @cache_percentage = cache_percentage
           @can_change_speed = can_change_speed
@@ -299,14 +284,9 @@ module KodiClient
         include Comparable
         extend Creatable
 
-        def self.create(hash)
-          return nil if hash.nil?
+        attr_reader :percentage, :time, :total_time
 
-          time = Types::Global::GlobalTime.create(hash['time'])
-          total_time = Types::Global::GlobalTime.create(hash['totaltime'])
-
-          new(hash['percentage'], time, total_time)
-        end
+        type_mapping ['time', Global::GlobalTime], ['totaltime', Global::GlobalTime]
 
         def initialize(percentage, time, total_time)
           @percentage = percentage

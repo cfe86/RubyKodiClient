@@ -5,7 +5,18 @@ module KodiClient
   # creates a create and create_list method by hash
   module Creatable
 
-    def type_mapping
+    def fields_to_map(fields)
+      @fields_to_map = fields
+    end
+
+    def type_mapping(*args)
+      return if args.nil?
+
+      @type_mapping = {}
+      args.map { |it| @type_mapping[it[0]] = Creatable::CreateMap.new(it[1], it[2].nil? ? false : it[2]) }
+    end
+
+    def lazy_type_mapping
       {}
     end
 
@@ -14,10 +25,17 @@ module KodiClient
     end
 
     def create(hash)
-      return nil if hash.nil? || @kodi_fields.none? { |it| !hash[it.to_s.gsub('_', '')].nil? }
+      return nil if hash.nil?
 
-      mapping = type_mapping
-      args = @kodi_fields.map do |it|
+      if @fields_to_map.nil? || @fields_to_map.empty?
+        fields = @kodi_fields
+        return nil if @kodi_fields.none? { |it| !hash[it.to_s.gsub('_', '')].nil? }
+      else
+        fields = @fields_to_map
+      end
+
+      mapping = @type_mapping.nil? ? lazy_type_mapping : @type_mapping
+      args = fields.map do |it|
         field = it.to_s.gsub('_', '')
         Creatable.extract_field_from_hash(field, hash, mapping)
       end
@@ -35,13 +53,13 @@ module KodiClient
     end
 
     def hash_to_arr(hash, fields)
-      Creatable.hash_to_arr(hash, fields, type_mapping)
+      Creatable.hash_to_arr(hash, fields, @type_mapping.nil? ? {} : @type_mapping)
     end
 
     def self.extract_field_from_hash(field, hash, mapping)
-      return nil if hash[field].nil?
-
       map = mapping[field]
+      return nil if hash[field].nil? && map.nil?
+
       return hash[field] if map.nil?
 
       return map.type.create_list(hash[field]) if map.is_list

@@ -23,10 +23,12 @@ module KodiClient
 
         attr_reader :fan_art, :thumbnail
 
+        def media_details_base_mappings
+          item_details_base_mappings
+        end
+
         def media_details_base_by_hash(hash)
-          @fan_art = hash['fanart']
-          @thumbnail = hash['thumbnail']
-          item_details_base_by_hash(hash)
+          media_details_base(*Creatable.hash_to_arr(hash, %w[fan_art thumbnail label]), media_details_base_mappings)
         end
 
         def media_details_base(fan_art, thumbnail, label)

@@ -27,14 +27,7 @@ module KodiClient
 
         attr_reader :files, :limits
 
-        def self.create(hash)
-          return nil if hash.nil?
-
-          files = Types::List::ListItemFile.create_list(hash['files'])
-          limits = Types::List::ListLimitsReturned.create(hash['limits'])
-
-          new(files, limits)
-        end
+        type_mapping ['files', List::ListItemFile, true], ['limits', List::ListLimitsReturned]
 
         def initialize(files, limits)
           @files = files
@@ -49,14 +42,7 @@ module KodiClient
 
         attr_reader :sources, :limits
 
-        def self.create(hash)
-          return nil if hash.nil?
-
-          sources = Types::List::FileLabel.create_list(hash['sources'])
-          limits = Types::List::ListLimitsReturned.create(hash['limits'])
-
-          new(sources, limits)
-        end
+        type_mapping ['sources', List::FileLabel, true], ['limits', List::ListLimitsReturned]
 
         def initialize(sources, limits)
           @sources = sources

@@ -8,16 +8,19 @@ require 'kodi_client/util/creatable'
 module KodiClient
   module Types
     module Video
-
       # Video.Details.Base https://kodi.wiki/view/JSON-RPC_API/v12#Video.Details.Base
       module VideoDetailsBase
         include Media::MediaDetailsBase
 
         attr_reader :art, :play_count
 
+        def video_details_base_mappings
+          media_details_base_mappings
+        end
+
         def video_details_base_by_hash(hash)
-          @art = Types::Media::MediaArtwork.create(hash['art'])
-          video_details_base(art, ['playcount'], *Creatable.hash_to_arr(hash, %w[fan_art thumbnail label]))
+          video_details_base(*Creatable.hash_to_arr(hash, %w[art play_count fan_art thumbnail label],
+                                                    video_details_base_mappings))
         end
 
         def video_details_base(art, play_count, fan_art, thumbnail, label)
@@ -48,9 +51,13 @@ module KodiClient
 
         attr_reader :title
 
+        def video_details_media_mappings
+          video_details_base_mappings
+        end
+
         def video_details_media_by_hash(hash)
-          art = Types::Media::MediaArtwork.create(hash['art'])
-          video_details_media(hash['title'], art, *Creatable.hash_to_arr(hash, %w[play_count fan_art thumbnail label]))
+          video_details_media(*Creatable.hash_to_arr(hash, %w[title art play_count fan_art thumbnail label]),
+                              video_details_base_mappings)
         end
 
         def video_details_media(title, art, play_count, fan_art, thumbnail, label)
@@ -65,10 +72,14 @@ module KodiClient
 
         attr_reader :date_added, :file, :last_played, :plot
 
+        def video_details_item_mappings
+          video_details_media_mappings
+        end
+
         def video_details_item_by_hash(hash)
-          art = Types::Media::MediaArtwork.create(hash['art'])
-          video_details_item(*Creatable.hash_to_arr(hash, %w[date_added file last_played plot title]), art,
-                             *Creatable.hash_to_arr(hash, %w[play_count fan_art thumbnail label]))
+          video_details_item(*Creatable.hash_to_arr(hash, %w[date_added file last_played plot title art
+                                                             play_count fan_art thumbnail label],
+                                                    video_details_item_mappings))
         end
 
         def video_details_item(date_added, file, last_played, plot, title, art, play_count, fan_art, thumbnail, label)
@@ -86,13 +97,18 @@ module KodiClient
 
         attr_reader :director, :resume, :runtime, :stream_details
 
+        def video_details_file_mappings
+          mappings = {
+            'resume' => Creatable::CreateMap.new(VideoResume),
+            'streamdetails' => Creatable::CreateMap.new(Streams)
+          }
+          mappings.merge(video_details_item_mappings)
+        end
+
         def video_details_file_by_hash(hash)
-          resume = VideoResume.create(hash['resume'])
-          stream_details = Streams.create(hash['streamdetails'])
-          art = Types::Media::MediaArtwork.create(hash['art'])
-          video_details_file(hash['director'], resume, hash['runtime'], stream_details,
-                             *Creatable.hash_to_arr(hash, %w[date_added file last_played plot title]), art,
-                             *Creatable.hash_to_arr(hash, %w[play_count fan_art thumbnail label]))
+          video_details_file(*Creatable.hash_to_arr(hash, %w[director resume runtime stream_details date_added
+                                                             file last_played plot title art play_count fan_art
+                                                             thumbnail label], video_details_file_mappings))
         end
 
         def video_details_file(director, resume, runtime, stream_details, date_added, file, last_played, plot, title,
@@ -125,14 +141,8 @@ module KodiClient
 
         attr_reader :audio, :subtitle, :video
 
-        def self.create(hash)
-          return nil if hash.nil?
-
-          audio = Types::Player::AudioStream.create_list(hash['audio'])
-          subtitle = Types::Player::Subtitle.create_list(hash['subtitle'])
-          video = Types::Player::VideoStream.create_list(hash['video'])
-          new(audio, subtitle, video)
-        end
+        type_mapping ['audio', Player::AudioStream, true], ['subtitle', Player::Subtitle, true],
+                     ['video', Player::VideoStream, true]
 
         def initialize(audio, subtitle, video)
           @audio = audio

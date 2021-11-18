@@ -168,15 +168,8 @@ module KodiClient
 
         attr_reader :current_control, :current_window, :fullscreen, :skin, :stereoscopic_mode
 
-        def self.create(hash)
-          return nil if hash.nil?
-
-          current_control = Global::IdLabel.create(hash['currentcontrol'])
-          current_window = Global::IdLabel.create(hash['currentwindow'])
-          skin = Global::IdName.create(hash['skin'])
-          stereoscopic_mode = StereoscopyMode.create(hash['stereoscopicmode'])
-          new(current_control, current_window, hash['fullscreen'], skin, stereoscopic_mode)
-        end
+        type_mapping ['currentcontrol', Global::IdLabel], ['currentwindow', Global::IdLabel],
+                     ['skin', Global::IdName], ['stereoscopicmode', StereoscopyMode]
 
         def initialize(current_control, current_window, fullscreen, skin, stereoscopic_mode)
           @current_control = current_control

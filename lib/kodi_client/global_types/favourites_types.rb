@@ -54,10 +54,7 @@ module KodiClient
 
         attr_reader :favourites, :limits
 
-        def self.type_mapping
-          { 'favourites' => Creatable::CreateMap.new(DetailsFavourite, true),
-            'limits' => Creatable::CreateMap.new(Types::List::ListLimitsReturned) }
-        end
+        type_mapping ['favourites', DetailsFavourite, true], ['limits', Types::List::ListLimitsReturned]
 
         def initialize(favourites, limits)
           @favourites = favourites

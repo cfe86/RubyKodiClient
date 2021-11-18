@@ -38,9 +38,14 @@ module KodiClient
 
         attr_reader :art, :date_added, :genre
 
+        def audio_details_base_mappings
+          mappings = { 'art' => Creatable::CreateMap.new(Types::Media::MediaArtwork) }
+          mappings.merge(media_details_base_mappings)
+        end
+
         def audio_details_base_by_hash(hash)
-          audio_details_base(Types::Media::MediaArtwork.create(hash['art']), hash['date_added'], hash['genre'],
-                             *Creatable.hash_to_arr(hash, %w[fan_art thumbnail label]))
+          audio_details_base(*Creatable.hash_to_arr(hash, %w[art date_added genre fan_art thumbnail label]),
+                             audio_details_base_mappings)
         end
 
         def audio_details_base(art, date_added, genre, fan_art, thumbnail, label)
@@ -58,11 +63,16 @@ module KodiClient
         attr_reader :artist, :artist_id, :display_artist, :musicbrainz_album_artist_id, :original_date, :rating,
                     :release_date, :sort_artist, :title, :user_rating, :votes, :year
 
+        def audio_details_media_mappings
+          audio_details_base_mappings
+        end
+
         def audio_details_media_by_hash(hash)
           audio_details_media(*Creatable.hash_to_arr(hash, %w[artist artist_id display_artist
                                                               musicbrainz_album_artist_id original_date rating
                                                               release_date sort_artist title user_rating votes year art
-                                                              date_added genre fan_art thumbnail label]))
+                                                              date_added genre fan_art thumbnail label],
+                                                     audio_details_base_mappings))
         end
 
         def audio_details_media(artist, artist_id, display_artist, musicbrainz_album_artist_id, original_date,
@@ -151,22 +161,13 @@ module KodiClient
                     :description, :is_box_set, :last_played, :mood, :musicbrainz_album_id, :musicbrainz_release_group_id,
                     :play_count, :release_type, :song_genres, :source_id, :style, :theme, :total_discs, :type
 
-        def self.type_mapping
-          { 'songgenres' => Creatable::CreateMap.new(Genre, true),
-            'art' => Creatable::CreateMap.new(Types::Media::MediaArtwork) }
-        end
+        fields_to_map %w[album_duration album_id album_label album_status art artist artist_id compilation date_added
+                         date_modified date_new description display_artist fan_art genre is_box_set label last_played
+                         mood musicbrainz_album_artist_id musicbrainz_album_id musicbrainz_release_group_id
+                         original_date play_count rating release_date release_type song_genres sort_artist source_id
+                         style theme thumbnail title total_discs type user_rating votes year]
 
-        def self.create(hash)
-          return nil if hash.nil?
-
-          new(*Creatable.hash_to_arr(
-            hash, %w[album_duration album_id album_label album_status art artist artist_id compilation date_added
-                     date_modified date_new description display_artist fan_art genre is_box_set label last_played mood
-                     musicbrainz_album_artist_id musicbrainz_album_id musicbrainz_release_group_id original_date
-                     play_count rating release_date release_type song_genres sort_artist source_id style theme
-                     thumbnail title total_discs type user_rating votes year], type_mapping
-          ))
-        end
+        type_mapping ['songgenres', Genre, true], ['art', Types::Media::MediaArtwork]
 
         def initialize(album_duration, album_id, album_label, album_status, art, artist, artist_id, compilation,
                        date_added, date_modified, date_new, description, display_artist, fan_art, genre, is_box_set,
@@ -208,12 +209,11 @@ module KodiClient
 
         attr_reader :albums, :limits
 
-        def self.create(hash)
-          return nil if hash.nil?
-
-          albums = DetailsAlbum.create_list(hash['albums'])
-          limits = List::ListLimitsReturned.create(hash['limits'])
-          new(albums, limits)
+        def self.lazy_type_mapping
+          {
+            'albums' => Creatable::CreateMap.new(DetailsAlbum, true),
+            'limits' => Creatable::CreateMap.new(List::ListLimitsReturned)
+          }
         end
 
         def initialize(albums, limits)
@@ -221,7 +221,6 @@ module KodiClient
           @limits = limits
         end
       end
-
     end
   end
 end

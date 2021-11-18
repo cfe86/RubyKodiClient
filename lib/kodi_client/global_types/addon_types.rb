@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'kodi_client/global_types/item_types'
+require 'kodi_client/global_types/list_types'
 require 'kodi_client/util/comparable'
 require 'kodi_client/util/iterable'
 require 'kodi_client/util/creatable'
@@ -118,19 +119,10 @@ module KodiClient
         attr_reader :addon_id, :author, :broken, :dependencies, :description, :disclaimer, :enabled, :extra_info,
                     :fan_art, :installed, :name, :path, :rating, :summary, :thumbnail, :type, :version
 
-        def self.type_mapping
-          { 'dependencies' => Creatable::CreateMap.new(AddonDependency, true),
-            'extrainfo' => Creatable::CreateMap.new(AddonExtraInfo, true) }
-        end
+        fields_to_map %w[addon_id author broken dependencies description disclaimer enabled extra_info fan_art
+                         installed name path rating summary thumbnail type version label]
 
-        def self.create(hash)
-          return nil if hash.nil?
-
-          new(*Creatable.hash_to_arr(
-            hash, %w[addon_id author broken dependencies description disclaimer enabled extra_info
-                     fan_art installed name path rating summary thumbnail type version label], type_mapping
-          ))
-        end
+        type_mapping ['dependencies', AddonDependency, true], ['extrainfo', AddonExtraInfo, true]
 
         def initialize(addon_id, author, broken, dependencies, description, disclaimer, enabled, extra_info,
                        fan_art, installed, name, path, rating, summary, thumbnail, type, version, label)
@@ -158,21 +150,11 @@ module KodiClient
       # getAddons return
       class Addons
         include Comparable
+        extend Creatable
 
         attr_reader :addons, :limits
 
-        def self.type_mapping
-          { 'addons' => Creatable::CreateMap.new(AddonDetails, true),
-            'limits' => Creatable::CreateMap.new(List::ListLimitsReturned) }
-        end
-
-        def self.create(hash)
-          return nil if hash.nil?
-
-          new(*Creatable.hash_to_arr(
-            hash, %w[addons limits], type_mapping
-          ))
-        end
+        type_mapping ['addons', AddonDetails, true], ['limits', List::ListLimitsReturned]
 
         def initialize(addons, limits)
           @addons = addons
@@ -183,14 +165,11 @@ module KodiClient
       # getAddon return
       class Addon
         include Comparable
+        extend Creatable
 
         attr_reader :addon
 
-        def self.create(hash)
-          return nil if hash.nil?
-
-          new(AddonDetails.create(hash['addon']))
-        end
+        type_mapping ['addon', AddonDetails]
 
         def initialize(addon)
           @addon = addon

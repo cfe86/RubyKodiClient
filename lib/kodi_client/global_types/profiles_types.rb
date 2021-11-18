@@ -24,11 +24,7 @@ module KodiClient
 
         attr_reader :lock_mode, :thumbnail
 
-        def self.create(hash)
-          return nil if hash.nil?
-
-          new(*Creatable.hash_to_arr(hash, %w[lock_mode thumbnail label]))
-        end
+        fields_to_map %w[lock_mode thumbnail label]
 
         def initialize(lock_mode, thumbnail, label)
           @lock_mode = lock_mode
@@ -48,14 +44,7 @@ module KodiClient
 
         attr_reader :limits, :profiles
 
-        def self.create(hash)
-          return nil if hash.nil?
-
-          limits = Types::List::ListLimitsReturned.create(hash['limits'])
-          profiles = Types::Profiles::DetailsProfile.create_list(hash['profiles'])
-
-          new(limits, profiles)
-        end
+        type_mapping ['limits', List::ListLimitsReturned], ['profiles', DetailsProfile, true]
 
         def initialize(limits, profiles)
           @limits = limits

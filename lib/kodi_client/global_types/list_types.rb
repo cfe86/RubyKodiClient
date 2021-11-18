@@ -28,11 +28,7 @@ module KodiClient
 
         attr_reader :list_start, :list_end, :total
 
-        def self.create(hash)
-          return nil if hash.nil?
-
-          new(hash['start'], hash['end'], hash['total'])
-        end
+        fields_to_map %w[start end total]
 
         def initialize(list_start, list_end, total)
           @list_start = list_start
@@ -257,31 +253,34 @@ module KodiClient
                     :special_sort_season, :studio, :style, :tag, :tag_line, :theme, :top250, :total_discs, :track,
                     :trailer, :tv_show_id, :type, :unique_id, :votes, :watched_episodes, :writer
 
+        def list_item_base_mappings
+          mappings = {
+            'cast' => Creatable::CreateMap.new(Video::VideoCast, true),
+            'contributors' => Creatable::CreateMap.new(Audio::AudioContributor, true),
+            'resume' => Creatable::CreateMap.new(Video::VideoResume),
+            'streamdetails' => Creatable::CreateMap.new(Video::Streams),
+            'art' => Creatable::CreateMap.new(Media::MediaArtwork)
+          }
+          mappings.merge(video_details_file_mappings).merge(audio_details_media_mappings)
+        end
+
         def list_item_base_by_hash(hash)
-          cast = Types::Video::VideoCast.create_list(hash['cast'])
-          contributors = Types::Audio::AudioContributor.create_list(hash['contributors'])
-          resume = Types::Video::VideoResume.create(hash['resume'])
-          stream_details = Types::Video::Streams.create(hash['streamdetails'])
-          art = Types::Media::MediaArtwork.create(hash['art'])
-          hash['type'] = 'unknown' if hash['type'].nil?
-          list_item_base(*Creatable.hash_to_arr(hash, %w[album album_artist album_artist_id album_id
-                                                         album_release_type album_status bit_rate bpm]), cast,
-                         hash['channels'], hash['comment'], hash['compilation'], contributors,
-                         *Creatable.hash_to_arr(hash, %w[country description disc disc_title display_composer
-                                                         display_conductor display_lyricist display_orchestra duration
-                                                         dyn_path episode episode_guide first_aired id imdb_number
-                                                         is_box_set lyrics media_path mood mpaa musicbrainz_artist_id
-                                                         musicbrainz_track_id original_date original_title plot_outline
-                                                         premiered production_code release_date release_type sample_rate
-                                                         season set set_id show_link show_title sort_title
-                                                         special_sort_episode special_sort_season studio style tag
-                                                         tag_line theme top250 total_discs track trailer tv_show_id
-                                                         type unique_id votes watched_episodes writer director]),
-                         resume, hash['runtime'], stream_details,
-                         *Creatable.hash_to_arr(hash, %w[date_added file last_played plot title]), art,
-                         *Creatable.hash_to_arr(hash, %w[play_count fan_art thumbnail label artist artist_id
-                                                         display_artist musicbrainz_album_artist_id rating sort_artist
-                                                         user_rating year genre]))
+          return nil if hash.nil?
+
+          list_item_base(*Creatable.hash_to_arr(
+            hash, %w[album album_artist album_artist_id album_id album_release_type album_status bit_rate
+                     bpm cast channels comment compilation contributors country description disc
+                     disc_title display_composer display_conductor display_lyricist display_orchestra
+                     duration dyn_path episode episode_guide first_aired id imdb_number is_box_set
+                     lyrics media_path mood mpaa musicbrainz_artist_id musicbrainz_track_id original_date
+                     original_title plot_outline premiered production_code release_date release_type
+                     sample_rate season set set_id show_link show_title sort_title special_sort_episode
+                     special_sort_season studio style tag tag_line theme top250 total_discs track
+                     trailer tv_show_id type unique_id votes watched_episodes writer director resume
+                     runtime stream_details date_added file last_played plot title art play_count
+                     fan_art thumbnail label artist artist_id display_artist musicbrainz_album_artist_id
+                     rating sort_artist user_rating year genre], list_item_base_mappings
+          ))
         end
 
         def list_item_base(album, album_artist, album_artist_id, album_id, album_release_type, album_status, bit_rate,
@@ -375,38 +374,27 @@ module KodiClient
         include ListItemBase
         include Comparable
         extend Creatable
+        extend ListItemBase
 
         attr_reader :channel, :channel_number, :channel_type, :end_time, :hidden, :locked, :start_time,
                     :sub_channel_number
 
-        def self.create(hash)
-          return nil if hash.nil?
+        fields_to_map %w[channel channel_number channel_type end_time hidden locked start_time sub_channel_number
+                         album album_artist album_artist_id album_id album_release_type album_status bit_rate
+                         bpm cast channels comment compilation contributors country description disc
+                         disc_title display_composer display_conductor display_lyricist display_orchestra
+                         duration dyn_path episode episode_guide first_aired id imdb_number is_box_set
+                         lyrics media_path mood mpaa musicbrainz_artist_id musicbrainz_track_id original_date
+                         original_title plot_outline premiered production_code release_date release_type
+                         sample_rate season set set_id show_link show_title sort_title special_sort_episode
+                         special_sort_season studio style tag tag_line theme top250 total_discs track
+                         trailer tv_show_id type unique_id votes watched_episodes writer director resume
+                         runtime stream_details date_added file last_played plot title art play_count
+                         fan_art thumbnail label artist artist_id display_artist musicbrainz_album_artist_id
+                         rating sort_artist user_rating year genre]
 
-          cast = Types::Video::VideoCast.create_list(hash['cast'])
-          contributors = Types::Audio::AudioContributor.create_list(hash['contributors'])
-          resume = Types::Video::VideoResume.create(hash['resume'])
-          stream_details = Types::Video::Streams.create(hash['streamdetails'])
-          art = Types::Media::MediaArtwork.create(hash['art'])
-          hash['type'] = 'unknown' if hash['type'].nil?
-          new(*Creatable.hash_to_arr(hash, %w[channel channel_number channel_type end_time hidden locked start_time
-                                              sub_channel_number album album_artist album_artist_id album_id
-                                              album_release_type album_status bit_rate bpm]), cast,
-              hash['channels'], hash['comment'], hash['compilation'], contributors,
-              *Creatable.hash_to_arr(hash, %w[country description disc disc_title display_composer
-                                              display_conductor display_lyricist display_orchestra duration
-                                              dyn_path episode episode_guide first_aired id imdb_number
-                                              is_box_set lyrics media_path mood mpaa musicbrainz_artist_id
-                                              musicbrainz_track_id original_date original_title plot_outline
-                                              premiered production_code release_date release_type sample_rate
-                                              season set set_id show_link show_title sort_title
-                                              special_sort_episode special_sort_season studio style tag
-                                              tag_line theme top250 total_discs track trailer tv_show_id
-                                              type unique_id votes watched_episodes writer director]),
-              resume, hash['runtime'], stream_details,
-              *Creatable.hash_to_arr(hash, %w[date_added file last_played plot title]), art,
-              *Creatable.hash_to_arr(hash, %w[play_count fan_art thumbnail label artist artist_id
-                                              display_artist musicbrainz_album_artist_id rating sort_artist
-                                              user_rating year genre]))
+        def self.lazy_type_mapping
+          list_item_base_mappings
         end
 
         def initialize(channel, channel_number, channel_type, end_time, hidden, locked, start_time, sub_channel_number,
@@ -422,7 +410,6 @@ module KodiClient
                        runtime, stream_details, date_added, file, last_played, plot, title, art, play_count,
                        fan_art, thumbnail, label, artist, artist_id, display_artist, musicbrainz_album_artist_id,
                        rating, sort_artist, user_rating, year, genre)
-
           @channel = channel
           @channel_number = channel_number
           @channel_type = channel_type
@@ -431,6 +418,7 @@ module KodiClient
           @locked = locked
           @start_time = start_time
           @sub_channel_number = sub_channel_number
+          type = type.nil? ? 'unknown' : type
 
           list_item_base(album, album_artist, album_artist_id, album_id, album_release_type, album_status, bit_rate,
                          bpm, cast, channels, comment, compilation, contributors, country, description, disc,
@@ -452,37 +440,26 @@ module KodiClient
         include ListItemBase
         include Comparable
         extend Creatable
+        extend ListItemBase
 
         attr_reader :file, :file_type, :last_modified, :mime_type, :size
 
-        def self.create(hash)
-          return nil if hash.nil?
+        fields_to_map %w[file_type last_modified mime_type size
+                         album album_artist album_artist_id album_id album_release_type album_status bit_rate
+                         bpm cast channels comment compilation contributors country description disc
+                         disc_title display_composer display_conductor display_lyricist display_orchestra
+                         duration dyn_path episode episode_guide first_aired id imdb_number is_box_set
+                         lyrics media_path mood mpaa musicbrainz_artist_id musicbrainz_track_id original_date
+                         original_title plot_outline premiered production_code release_date release_type
+                         sample_rate season set set_id show_link show_title sort_title special_sort_episode
+                         special_sort_season studio style tag tag_line theme top250 total_discs track
+                         trailer tv_show_id type unique_id votes watched_episodes writer director resume
+                         runtime stream_details date_added file last_played plot title art play_count
+                         fan_art thumbnail label artist artist_id display_artist musicbrainz_album_artist_id
+                         rating sort_artist user_rating year genre]
 
-          cast = Types::Video::VideoCast.create_list(hash['cast'])
-          contributors = Types::Audio::AudioContributor.create_list(hash['contributors'])
-          resume = Types::Video::VideoResume.create(hash['resume'])
-          stream_details = Types::Video::Streams.create(hash['streamdetails'])
-          art = Types::Media::MediaArtwork.create(hash['art'])
-          hash['type'] = 'unknown' if hash['type'].nil?
-          new(*Creatable.hash_to_arr(hash, %w[file_type last_modified mime_type size]),
-              *Creatable.hash_to_arr(hash, %w[album album_artist album_artist_id album_id
-                                              album_release_type album_status bit_rate bpm]), cast,
-              hash['channels'], hash['comment'], hash['compilation'], contributors,
-              *Creatable.hash_to_arr(hash, %w[country description disc disc_title display_composer
-                                              display_conductor display_lyricist display_orchestra duration
-                                              dyn_path episode episode_guide first_aired id imdb_number
-                                              is_box_set lyrics media_path mood mpaa musicbrainz_artist_id
-                                              musicbrainz_track_id original_date original_title plot_outline
-                                              premiered production_code release_date release_type sample_rate
-                                              season set set_id show_link show_title sort_title
-                                              special_sort_episode special_sort_season studio style tag
-                                              tag_line theme top250 total_discs track trailer tv_show_id
-                                              type unique_id votes watched_episodes writer director]),
-              resume, hash['runtime'], stream_details,
-              *Creatable.hash_to_arr(hash, %w[date_added file last_played plot title]), art,
-              *Creatable.hash_to_arr(hash, %w[play_count fan_art thumbnail label artist artist_id
-                                              display_artist musicbrainz_album_artist_id rating sort_artist
-                                              user_rating year genre]))
+        def self.lazy_type_mapping
+          list_item_base_mappings
         end
 
         def initialize(file_type, last_modified, mime_type, size,
@@ -503,6 +480,7 @@ module KodiClient
           @last_modified = last_modified
           @mime_type = mime_type
           @size = size
+          type = type.nil? ? 'unknown' : type
           list_item_base(album, album_artist, album_artist_id, album_id, album_release_type, album_status, bit_rate,
                          bpm, cast, channels, comment, compilation, contributors, country, description, disc,
                          disc_title, display_composer, display_conductor, display_lyricist, display_orchestra,
