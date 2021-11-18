@@ -30,22 +30,50 @@ module KodiClient
       end
     end
 
+    def mapping
+      {}
+    end
+
     def create_list(hash)
       hash.nil? ? [] : hash.map { |it| create(it) }
     end
 
     def create(hash)
-      return nil if @kodi_fields.none? { |it| !hash[it].nil? }
+      return nil if hash.nil? || @kodi_fields.none? { |it| !hash[it].nil? }
 
-      new(*@kodi_fields.map { |it| hash[it] })
+      new(*@kodi_fields.map { |it| hash[it.to_s.gsub('_', '')] })
     end
 
-    def self.hash_to_arr(hash, fields)
-      fields.map { |it| hash[it.to_s.gsub('_', '')].nil? ? nil : hash[it.to_s.gsub('_', '')] }
+    def self.hash_to_arr(hash, fields, mapping = {})
+      return nil if hash.nil?
+
+      fields.map do |it|
+        field = it.to_s.gsub('_', '')
+
+        next nil if hash[field].nil?
+
+        map = mapping[field]
+        next hash[field] if map.nil?
+
+        next map.type.create_list(hash[field]) if map.is_list
+
+        map.type.create(hash[field])
+      end
     end
 
     def hash_to_arr(hash, fields)
-      Creatable.hash_to_arr(hash, fields)
+      Creatable.hash_to_arr(hash, fields, mapping)
+    end
+
+    # mapping class with the type and if it is a list field or not
+    class CreateMap
+
+      attr_reader :type, :is_list
+
+      def initialize(type, is_list = false)
+        @type = type
+        @is_list = is_list
+      end
     end
   end
 end

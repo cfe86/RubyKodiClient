@@ -151,20 +151,17 @@ module KodiClient
                     :description, :is_box_set, :last_played, :mood, :musicbrainz_album_id, :musicbrainz_release_group_id,
                     :play_count, :release_type, :song_genres, :source_id, :style, :theme, :total_discs, :type
 
-        def self.create(hash)
-          genres = Genre.create_list(hash['songgenres'])
-          art = Types::Media::MediaArtwork.create(hash['art'])
+        def self.mapping
+          { 'songgenres' => Creatable::CreateMap.new(Genre, true),
+            'art' => Creatable::CreateMap.new(Types::Media::MediaArtwork) }
+        end
 
-          new(*Creatable.hash_to_arr(hash, %w[album_duration album_id album_label album_status]), art,
-              *Creatable.hash_to_arr(hash, %w[artist artist_id compilation date_added date_modified
-                                              date_new description display_artist fan_art genre]),
-              *Creatable.hash_to_arr(hash, %w[is_box_set label last_played mood
-                                              musicbrainz_album_artist_id musicbrainz_album_id
-                                              musicbrainz_release_group_id original_date play_count
-                                              rating release_date release_type]), genres,
-              *Creatable.hash_to_arr(hash, %w[sort_artist
-                                              source_id style theme thumbnail title total_discs type
-                                              user_rating votes year]))
+        def self.create(hash)
+          new(*Creatable.hash_to_arr(hash, %w[album_duration album_id album_label album_status art artist artist_id compilation
+                       date_added date_modified date_new description display_artist fan_art genre is_box_set label last_played mood
+                       musicbrainz_album_artist_id musicbrainz_album_id musicbrainz_release_group_id original_date
+                       play_count rating release_date release_type song_genres sort_artist source_id style
+                       theme thumbnail title total_discs type user_rating votes year], mapping))
         end
 
         def initialize(album_duration, album_id, album_label, album_status, art, artist, artist_id, compilation,
