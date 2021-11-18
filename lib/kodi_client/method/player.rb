@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
 require 'kodi_client/kodi_module'
-require 'kodi_client/global_types/addon_types'
-require 'kodi_client/global_types/list_types'
-require 'kodi_client/global_types/player_type'
+require 'kodi_client/types/addon_types'
+require 'kodi_client/types/list_types'
+require 'kodi_client/types/player_type'
 
 module KodiClient
-  module Modules
+  module Method
     # contains all Kodi Application methods
     class Player < KodiModule
 

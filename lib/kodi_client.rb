@@ -4,6 +4,11 @@ require 'http'
 require 'json'
 
 require 'kodi_client/Chainable'
+
+require 'kodi_client/util/comparable'
+require 'kodi_client/util/creatable'
+require 'kodi_client/util/iterable'
+
 require 'kodi_client/method/addons'
 require 'kodi_client/method/audio_library'
 require 'kodi_client/method/application'
@@ -27,16 +32,16 @@ module KodiClient
     attr_reader :audio_library, :addons, :application, :favourites, :files, :gui, :input, :player, :profiles, :system
 
     def initialize
-      @addons = KodiClient::Modules::Addons.new
-      @audio_library = KodiClient::Modules::AudioLibrary.new
-      @application = KodiClient::Modules::Application.new
-      @favourites = KodiClient::Modules::Favourites.new
-      @files = KodiClient::Modules::Files.new
-      @gui = KodiClient::Modules::GUI.new
-      @input = KodiClient::Modules::Input.new
-      @player = KodiClient::Modules::Player.new
-      @profiles = KodiClient::Modules::Profiles.new
-      @system = KodiClient::Modules::System.new
+      @addons = KodiClient::Method::Addons.new
+      @audio_library = KodiClient::Method::AudioLibrary.new
+      @application = KodiClient::Method::Application.new
+      @favourites = KodiClient::Method::Favourites.new
+      @files = KodiClient::Method::Files.new
+      @gui = KodiClient::Method::GUI.new
+      @input = KodiClient::Method::Input.new
+      @player = KodiClient::Method::Player.new
+      @profiles = KodiClient::Method::Profiles.new
+      @system = KodiClient::Method::System.new
     end
 
     def apply_options_to_methods(options)

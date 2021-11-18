@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
 require 'kodi_client/kodi_module'
-require 'kodi_client/global_types/application_types'
+require 'kodi_client/types/application_types'
 
 module KodiClient
-  module Modules
+  module Method
     # contains all Kodi Application methods
     class AudioLibrary < KodiModule
 

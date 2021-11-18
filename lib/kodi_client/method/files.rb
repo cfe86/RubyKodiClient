@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 require 'kodi_client/kodi_module'
-require 'kodi_client/global_types/files_types'
-require 'kodi_client/global_types/list_types'
+require 'kodi_client/types/files_types'
+require 'kodi_client/types/list_types'
 
 module KodiClient
-  module Modules
+  module Method
     # contains all Kodi Application methods
     class Files < KodiModule
 

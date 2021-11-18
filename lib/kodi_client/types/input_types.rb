@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'kodi_client/util/iterable'
-
 module KodiClient
   module Types
     module Input

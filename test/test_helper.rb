@@ -12,12 +12,12 @@ require 'kodi_client/method/system'
 require 'kodi_client/method/profiles'
 require 'kodi_client/method/files'
 
-require 'kodi_client/global_types/global_types'
-require 'kodi_client/global_types/application_types'
-require 'kodi_client/global_types/addon_types'
-require 'kodi_client/global_types/gui_types'
-require 'kodi_client/global_types/item_types'
-require 'kodi_client/global_types/list_types'
+require 'kodi_client/types/global_types'
+require 'kodi_client/types/application_types'
+require 'kodi_client/types/addon_types'
+require 'kodi_client/types/gui_types'
+require 'kodi_client/types/item_types'
+require 'kodi_client/types/list_types'
 require 'kodi_client/options'
 
 module KodiClient

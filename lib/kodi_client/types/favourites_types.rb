@@ -1,9 +1,6 @@
 # frozen_string_literal: true
 
-require 'kodi_client/util/comparable'
-require 'kodi_client/util/iterable'
-require 'kodi_client/util/creatable'
-require 'kodi_client/global_types/list_types'
+require 'kodi_client/types/list_types'
 
 module KodiClient
   module Types

@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-require 'kodi_client/global_types/gui_types'
+require 'kodi_client/types/gui_types'
 require 'kodi_client/kodi_module'
-require 'kodi_client/global_types/system_types'
+require 'kodi_client/types/system_types'
 
 module KodiClient
-  module Modules
+  module Method
     # contains all Kodi System methods
     class System < KodiModule
 

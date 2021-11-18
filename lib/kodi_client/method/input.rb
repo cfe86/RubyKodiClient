@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-require 'kodi_client/global_types/gui_types'
+require 'kodi_client/types/gui_types'
 require 'kodi_client/kodi_module'
-require 'kodi_client/global_types/input_types'
+require 'kodi_client/types/input_types'
 
 module KodiClient
-  module Modules
+  module Method
     # contains all Kodi Input methods
     class Input < KodiModule
 
