@@ -5,6 +5,7 @@ require 'json'
 
 require 'kodi_client/Chainable'
 require 'kodi_client/method/addons'
+require 'kodi_client/method/audio_library'
 require 'kodi_client/method/application'
 require 'kodi_client/method/favourites'
 require 'kodi_client/method/files'
@@ -23,10 +24,11 @@ module KodiClient
   class Client
     include Chainable
 
-    attr_reader :addons, :application, :favourites, :files, :gui, :input, :player, :profiles, :system
+    attr_reader :audio_library, :addons, :application, :favourites, :files, :gui, :input, :player, :profiles, :system
 
     def initialize
       @addons = KodiClient::Modules::Addons.new
+      @audio_library = KodiClient::Modules::AudioLibrary.new
       @application = KodiClient::Modules::Application.new
       @favourites = KodiClient::Modules::Favourites.new
       @files = KodiClient::Modules::Files.new
@@ -45,3 +47,8 @@ module KodiClient
     end
   end
 end
+
+client = KodiClient.connect('10.88.111.7', 8080).auth('kodi', 'pw')
+c = client.audio_library
+r = c.get_albums
+puts r

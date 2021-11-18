@@ -34,11 +34,8 @@ module KodiClient
       end
 
       def get_addon_details(addon_id = nil, properties = [], kodi_id = 1)
-        request = KodiRequest.new(kodi_id, GET_ADDON_DETAILS,
-                                  {
-                                    'addonid' => addon_id,
-                                    'properties' => properties
-                                  })
+        request = KodiRequest.new(kodi_id, GET_ADDON_DETAILS, { 'addonid' => addon_id,
+                                                                'properties' => properties })
         json = invoke_api(request)
 
         result = Types::Addons::Addon.create(json['result'])
@@ -47,22 +44,14 @@ module KodiClient
       end
 
       def execute_addon(addon_id = nil, params = '', wait = false, kodi_id = 1)
-        request = KodiRequest.new(kodi_id, EXECUTE_ADDON,
-                                  {
-                                    'addonid' => addon_id,
-                                    'params' => params,
-                                    'wait' => wait
-                                  })
+        request = KodiRequest.new(kodi_id, EXECUTE_ADDON, { 'addonid' => addon_id, 'params' => params,
+                                                            'wait' => wait })
         json = invoke_api(request)
         KodiResponse.new(json)
       end
 
       def set_addon_enabled(addon_id = nil, enabled = Types::Global::Toggle::TOGGLE, kodi_id = 1)
-        request = KodiRequest.new(kodi_id, SET_ADDON_ENABLED,
-                                  {
-                                    'addonid' => addon_id,
-                                    'enabled' => enabled
-                                  })
+        request = KodiRequest.new(kodi_id, SET_ADDON_ENABLED, { 'addonid' => addon_id, 'enabled' => enabled })
         json = invoke_api(request)
         KodiResponse.new(json)
       end

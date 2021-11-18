@@ -35,7 +35,6 @@ module KodiClient
     end
 
     def create(hash)
-      return nil if hash.nil?
       return nil if @kodi_fields.none? { |it| !hash[it].nil? }
 
       new(*@kodi_fields.map { |it| hash[it] })

@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'kodi_client/method/application'
+require 'kodi_client/method/audio_library'
 require 'kodi_client/method/addons'
 require 'kodi_client/method/gui'
 require 'kodi_client/method/player'

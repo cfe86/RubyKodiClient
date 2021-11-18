@@ -1,5 +1,5 @@
 require 'minitest/autorun'
-require 'kodi_test_helper'
+require 'test_helper'
 
 module KodiClient
   module Modules
