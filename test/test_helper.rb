@@ -31,7 +31,7 @@ module KodiClient
     def run_test(kodi_module, post, response, method)
       HTTP::Client.stub :new, MockHttpClient.new(post, response) do
         client = KodiClient.connect('127.0.0.1', 8080)
-        client.apply_options_to_methods(KodiClient::Options.new)
+        client.apply_options_to_methods(KodiClient::KodiOptions.new)
         mod = client.instance_variable_get("@#{kodi_module}")
         method.call(mod)
       end

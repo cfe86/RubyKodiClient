@@ -2,9 +2,8 @@ require 'minitest/autorun'
 require 'test_helper'
 
 module KodiClient
-  module Method
-    class KodiGUITests < Minitest::Test
-      include Types::GUI
+  module Test
+    class GUITests < Minitest::Test
       include KodiClient::Test
 
       def test_error
@@ -32,10 +31,10 @@ module KodiClient
                    '"label":"Home"},"fullscreen":false,"skin":{"id":"skin.estuary","name":"Estuary"},'\
                    '"stereoscopicmode":{"label":"Disabled","mode":"off"}}}'
         actual = run_test('gui', post, response, ->(mod) { mod.get_properties })
-        expected_value = PropertyValue.new(Types::Global::IdLabel.new(nil, 'Movies'),
-                                           Types::Global::IdLabel.new(10_000, 'Home'), false,
-                                           Types::Global::IdName.new('skin.estuary', 'Estuary'),
-                                           StereoscopyMode.new('Disabled', 'off'))
+        expected_value = Types::GUI::PropertyValue.new(Types::Global::IdLabel.new(nil, 'Movies'),
+                                                       Types::Global::IdLabel.new(10_000, 'Home'), false,
+                                                       Types::Global::IdName.new('skin.estuary', 'Estuary'),
+                                                       Types::GUI::StereoscopyMode.new('Disabled', 'off'))
         expected = create_kodi_response(1, expected_value)
         assert_equal(expected, actual)
       end
@@ -46,10 +45,10 @@ module KodiClient
                    '"Over / Under","mode":"split_horizontal"},{"label":"Side by side","mode":"split_vertical"},'\
                    '{"label":"Anaglyph red / cyan","mode":"anaglyph_cyan_red"}]}}'
         actual = run_test('gui', post, response, ->(mod) { mod.get_stereoscopic_modes })
-        expected_result = [StereoscopyMode.new('Disabled', 'off'),
-                           StereoscopyMode.new('Over / Under', 'split_horizontal'),
-                           StereoscopyMode.new('Side by side', 'split_vertical'),
-                           StereoscopyMode.new('Anaglyph red / cyan', 'anaglyph_cyan_red')]
+        expected_result = [Types::GUI::StereoscopyMode.new('Disabled', 'off'),
+                           Types::GUI::StereoscopyMode.new('Over / Under', 'split_horizontal'),
+                           Types::GUI::StereoscopyMode.new('Side by side', 'split_vertical'),
+                           Types::GUI::StereoscopyMode.new('Anaglyph red / cyan', 'anaglyph_cyan_red')]
         expected = create_kodi_response(1, expected_result)
         assert_equal(expected, actual)
       end

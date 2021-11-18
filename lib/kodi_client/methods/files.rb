@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 module KodiClient
-  module Method
+  module Methods
     # contains all Kodi Application methods
-    class Files < KodiModule
+    class Files < KodiMethod
 
       GET_DIRECTORY = 'Files.GetDirectory'
       GET_FILE_DETAILS = 'Files.GetFileDetails'

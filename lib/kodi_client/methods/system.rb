@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 module KodiClient
-  module Method
+  module Methods
     # contains all Kodi System methods
-    class System < KodiModule
+    class System < KodiMethod
 
       EJECT_OPTICAL_DRIVE = 'System.EjectOpticalDrive'
       GET_PROPERTIES = 'System.GetProperties'

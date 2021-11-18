@@ -4,8 +4,8 @@ require 'minitest/autorun'
 require 'test_helper'
 
 module KodiClient
-  module Method
-    class KodiFavouritesTests < Minitest::Test
+  module Test
+    class FavouritesTests < Minitest::Test
       include KodiClient::Test
 
       def test_error

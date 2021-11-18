@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 module KodiClient
-  module Method
+  module Methods
     # contains all Kodi Application methods
-    class Player < KodiModule
+    class Player < KodiMethod
 
       ADD_SUBTITLE = 'Player.AddSubtitle'
       OPEN = 'Player.Open'

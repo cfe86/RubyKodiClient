@@ -4,8 +4,8 @@ require 'minitest/autorun'
 require 'test_helper'
 
 module KodiClient
-  module Method
-    class KodiApplicationTests < Minitest::Test
+  module Test
+    class ApplicationTests < Minitest::Test
       include KodiClient::Test
 
       def test_error
@@ -64,7 +64,7 @@ module KodiClient
         post = '{"jsonrpc":"2.0","id":1,"method":"Application.SetVolume", "params": {"volume": "increment"}}'
         response = '{"id":1,"jsonrpc":"2.0","result": 20}'
         actual = run_test('application', post, response,
-                          ->(mod) { mod.set_volume(KodiClient::Types::Global::IncrementDecrement::INCREMENT) })
+                          ->(mod) { mod.set_volume(Types::Global::IncrementDecrement::INCREMENT) })
         expected = create_kodi_response(1, 20)
         assert_equal(expected, actual)
       end
@@ -73,7 +73,7 @@ module KodiClient
         post = '{"jsonrpc":"2.0","id":1,"method":"Application.SetVolume", "params": {"volume": "decrement"}}'
         response = '{"id":1,"jsonrpc":"2.0","result": 20}'
         actual = run_test('application', post, response,
-                          ->(mod) { mod.set_volume(KodiClient::Types::Global::IncrementDecrement::DECREMENT) })
+                          ->(mod) { mod.set_volume(Types::Global::IncrementDecrement::DECREMENT) })
         expected = create_kodi_response(1, 20)
         assert_equal(expected, actual)
       end

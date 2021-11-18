@@ -2,7 +2,7 @@
 
 module KodiClient
   # holds all options like ip, port, credentials
-  class Options
+  class KodiOptions
 
     attr_accessor :ip, :port, :username, :password, :tls
 

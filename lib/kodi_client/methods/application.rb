@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 module KodiClient
-  module Method
+  module Methods
     # contains all Kodi Application methods
-    class Application < KodiModule
+    class Application < KodiMethod
 
       QUIT = 'Application.Quit'
       SET_MUTE = 'Application.SetMute'

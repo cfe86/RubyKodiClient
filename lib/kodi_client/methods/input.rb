@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 module KodiClient
-  module Method
+  module Methods
     # contains all Kodi Input methods
-    class Input < KodiModule
+    class Input < KodiMethod
 
       BACK = 'Input.Back'
       CONTEXT_MENU = 'Input.ContextMenu'

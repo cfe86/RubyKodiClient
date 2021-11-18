@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 module KodiClient
-  module Method
+  module Methods
     # contains all Kodi GUI methods
-    class GUI < KodiModule
+    class GUI < KodiMethod
 
       ACTIVATE_WINDOW = 'GUI.ActivateWindow'
       GET_PROPERTIES = 'GUI.GetProperties'

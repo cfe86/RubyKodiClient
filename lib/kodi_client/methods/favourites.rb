@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 module KodiClient
-  module Method
+  module Methods
     # contains all Kodi Application methods
-    class Favourites < KodiModule
+    class Favourites < KodiMethod
 
       ADD_FAVOURITE = 'Favourites.AddFavourite'
       GET_FAVOURITES = 'Favourites.GetFavourites'

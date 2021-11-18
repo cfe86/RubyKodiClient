@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 module KodiClient
-  module Method
+  module Methods
     # contains all Kodi Application methods
-    class Addons < KodiModule
+    class Addons < KodiMethod
 
       EXECUTE_ADDON = 'Addons.ExecuteAddon'
       GET_ADDON_DETAILS = 'Addons.GetAddonDetails'

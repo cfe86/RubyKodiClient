@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 module KodiClient
-  module Method
+  module Methods
     # contains all Kodi Application methods
-    class Profiles < KodiModule
+    class Profiles < KodiMethod
 
       GET_CURRENT_PROFILE = 'Profiles.GetCurrentProfile'
       GET_PROFILES = 'Profiles.GetProfiles'
