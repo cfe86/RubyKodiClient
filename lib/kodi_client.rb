@@ -47,8 +47,3 @@ module KodiClient
     end
   end
 end
-
-client = KodiClient.connect('10.88.111.7', 8080).auth('kodi', 'pw')
-c = client.audio_library
-r = c.get_albums
-puts r
