@@ -3,6 +3,7 @@
 require 'kodi_client/global_types/item_types'
 require 'kodi_client/util/comparable'
 require 'kodi_client/util/creatable'
+require 'kodi_client/util/iterable'
 
 module KodiClient
   module Types

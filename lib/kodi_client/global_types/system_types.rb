@@ -2,6 +2,7 @@
 
 require 'kodi_client/util/iterable'
 require 'kodi_client/util/comparable'
+require 'kodi_client/util/creatable'
 
 module KodiClient
   module Types
