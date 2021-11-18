@@ -1,9 +1,5 @@
 # frozen_string_literal: true
 
-require 'kodi_client/types/gui_types'
-require 'kodi_client/kodi_module'
-require 'kodi_client/types/input_types'
-
 module KodiClient
   module Method
     # contains all Kodi Input methods

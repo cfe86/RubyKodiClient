@@ -9,6 +9,9 @@ require 'kodi_client/util/comparable'
 require 'kodi_client/util/creatable'
 require 'kodi_client/util/iterable'
 
+require 'kodi_client/kodi_module'
+require 'kodi_client/options'
+
 require 'kodi_client/method/addons'
 require 'kodi_client/method/audio_library'
 require 'kodi_client/method/application'
@@ -20,6 +23,22 @@ require 'kodi_client/method/player'
 require 'kodi_client/method/profiles'
 require 'kodi_client/method/system'
 
+require 'kodi_client/types/global_types'
+require 'kodi_client/types/item_types'
+require 'kodi_client/types/media_types'
+require 'kodi_client/types/player_type'
+require 'kodi_client/types/pvr_type'
+require 'kodi_client/types/audio_types'
+require 'kodi_client/types/video_types'
+require 'kodi_client/types/system_types'
+require 'kodi_client/types/list_types'
+require 'kodi_client/types/application_types'
+require 'kodi_client/types/addon_types'
+require 'kodi_client/types/gui_types'
+require 'kodi_client/types/favourites_types'
+require 'kodi_client/types/profiles_types'
+require 'kodi_client/types/input_types'
+require 'kodi_client/types/files_types'
 
 # client for Kodi rest api https://kodi.wiki/view/JSON-RPC_API/v12
 module KodiClient

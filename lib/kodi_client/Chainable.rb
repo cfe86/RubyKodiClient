@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'kodi_client/options'
-
 module KodiClient
   # Offers methods like connect, auth and tls to be chained together
   module Chainable

@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-require 'http'
-require 'kodi_client/util/comparable'
-
 module KodiClient
 
   # the client that stores
@@ -78,10 +75,6 @@ module KodiClient
 
     def error?
       !@error.nil?
-    end
-
-    def ==(other)
-      compare(self, other)
     end
   end
 end

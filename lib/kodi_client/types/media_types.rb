@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'kodi_client/types/item_types'
-
 module KodiClient
   module Types
     module Media

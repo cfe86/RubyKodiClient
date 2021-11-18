@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-require 'kodi_client/kodi_module'
-require 'kodi_client/types/application_types'
-
 module KodiClient
   module Method
     # contains all Kodi Application methods

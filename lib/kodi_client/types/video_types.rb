@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-require 'kodi_client/types/media_types'
-require 'kodi_client/types/player_type'
-
 module KodiClient
   module Types
     module Video

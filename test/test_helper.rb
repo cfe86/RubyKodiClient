@@ -1,24 +1,6 @@
 # frozen_string_literal: true
 
 require 'kodi_client'
-require 'kodi_client/method/application'
-require 'kodi_client/method/audio_library'
-require 'kodi_client/method/addons'
-require 'kodi_client/method/gui'
-require 'kodi_client/method/player'
-require 'kodi_client/method/input'
-require 'kodi_client/method/favourites'
-require 'kodi_client/method/system'
-require 'kodi_client/method/profiles'
-require 'kodi_client/method/files'
-
-require 'kodi_client/types/global_types'
-require 'kodi_client/types/application_types'
-require 'kodi_client/types/addon_types'
-require 'kodi_client/types/gui_types'
-require 'kodi_client/types/item_types'
-require 'kodi_client/types/list_types'
-require 'kodi_client/options'
 
 module KodiClient
   module Test
