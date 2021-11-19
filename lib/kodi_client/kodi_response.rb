@@ -3,7 +3,7 @@
 module KodiClient
   # represents a kodi response
   class KodiResponse
-    include Comparable
+    include Extensions::Comparable
 
     attr_reader :id, :jsonrpc, :result, :error
 

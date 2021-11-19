@@ -122,8 +122,8 @@ module KodiClient
                    '"sources":[{"file":"upnp://5b36/f137/",'\
                    '"label":"Emby123"},{"file":"/path/to/file","label":"movies"}]}}'
         expected_limits = Types::List::ListLimitsReturned.new(0, 2, 2)
-        expected_sources = [Types::List::FileLabel.new('upnp://5b36/f137/', 'Emby123'),
-                            Types::List::FileLabel.new('/path/to/file', 'movies')]
+        expected_sources = [Types::Files::FileLabel.new('upnp://5b36/f137/', 'Emby123'),
+                            Types::Files::FileLabel.new('/path/to/file', 'movies')]
         actual = run_test('files', post, response, ->(mod) { mod.get_sources })
         expected = create_kodi_response(1, Types::Files::GetSourcesReturned.new(expected_sources, expected_limits))
         assert_equal(expected, actual)

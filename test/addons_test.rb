@@ -35,7 +35,7 @@ module KodiClient
           false, [], '', true, 'Modplug Audio Decoder', '/path/to/audiodecoder.modplug',
           -1, 'Modplug Audio Decoder', '', 'kodi.audiodecoder', '1.1.0', nil
         )]
-        expected = create_kodi_response(1, Types::Addons::Addons.new(expected_addons, expected_limits))
+        expected = create_kodi_response(1, Types::Addons::GetAddonsReturned.new(expected_addons, expected_limits))
         assert_equal(expected, actual)
       end
 
@@ -55,7 +55,7 @@ module KodiClient
           false, [], '', true, 'Modplug Audio Decoder', '/path/to/audiodecoder.modplug',
           -1, 'Modplug Audio Decoder', '', 'kodi.audiodecoder', '1.1.0', nil
         )
-        expected = create_kodi_response(1, Types::Addons::Addon.new(expected_addon), nil, nil)
+        expected = create_kodi_response(1, Types::Addons::GetAddonReturned.new(expected_addon), nil, nil)
         assert_equal(expected, actual)
       end
 

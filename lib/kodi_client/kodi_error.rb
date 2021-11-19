@@ -3,7 +3,7 @@
 module KodiClient
   # represents an error response
   class KodiError
-    include Comparable
+    include Extensions::Comparable
     attr_reader :code, :message
 
     def initialize(hash)

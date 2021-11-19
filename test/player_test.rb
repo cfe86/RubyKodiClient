@@ -60,7 +60,7 @@ module KodiClient
         expected_audio_stream = Types::Player::AudioStream.new(nil, 6, 'ac3', nil, nil, nil, nil, '', nil, nil)
         expected_video_stream = Types::Player::VideoStream.new('mpeg4', 304, nil, '', nil,
                                                                720, 8037, 2.3684210777282714844)
-        expected_stream_details = Types::Video::Streams.new([expected_audio_stream], [], [expected_video_stream])
+        expected_stream_details = Types::Video::StreamDetails.new([expected_audio_stream], [], [expected_video_stream])
         expected_resume = Types::Video::VideoResume.new(0, 0)
         expected_result = Types::List::ListItemAll.new(nil, nil, nil, nil, nil, nil, nil,
                                                        nil, '', nil, nil, nil, nil,

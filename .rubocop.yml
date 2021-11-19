@@ -12,5 +12,7 @@ Metrics/MethodLength:
   Enabled: false
 Metrics/PerceivedComplexity:
   Enabled: false
+Metrics/ModuleLength:
+  Enabled: false
 Style/OptionalBooleanParameter:
   Enabled: false

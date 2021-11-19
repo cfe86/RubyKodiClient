@@ -24,7 +24,7 @@ module KodiClient
                                     'installed' => installed.nil? || !installed ? 'all' : 'installed'
                                   })
         json = invoke_api(request)
-        result = Types::Addons::Addons.create(json['result'])
+        result = Types::Addons::GetAddonsReturned.create(json['result'])
         json['result'] = result
         KodiResponse.new(json)
       end
@@ -34,7 +34,7 @@ module KodiClient
                                                                 'properties' => properties })
         json = invoke_api(request)
 
-        result = Types::Addons::Addon.create(json['result'])
+        result = Types::Addons::GetAddonReturned.create(json['result'])
         json['result'] = result
         KodiResponse.new(json)
       end
