@@ -8,6 +8,10 @@ module KodiClient
         include Video::VideoDetailsFile
         include Audio::AudioDetailsMedia
 
+        def self.included(base)
+          base.extend(self)
+        end
+
         attr_reader :album, :album_artist, :album_artist_id, :album_id, :album_release_type, :album_status, :bit_rate,
                     :bpm, :cast, :channels, :comment, :compilation, :contributors, :country, :description, :disc,
                     :disc_title, :display_composer, :display_conductor, :display_lyricist, :display_orchestra,

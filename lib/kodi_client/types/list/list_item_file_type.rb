@@ -8,7 +8,6 @@ module KodiClient
         include ListItemBase
         include Extensions::Comparable
         extend Extensions::Creatable
-        extend ListItemBase
 
         attr_reader :file, :file_type, :last_modified, :mime_type, :size
 

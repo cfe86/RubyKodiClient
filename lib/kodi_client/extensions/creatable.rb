@@ -68,17 +68,12 @@ module KodiClient
       def self.hash_to_arr(hash, fields, mapping = {})
         return nil if hash.nil?
 
-        mapping = arr_to_mapping(mapping) unless mapping.is_a?(Hash)
+        mapping = mapping.map { |it| arr_to_mapping(it) } unless mapping.is_a?(Hash)
 
         fields.map do |it|
           field = it.to_s.gsub('_', '')
           extract_field_from_hash(field, hash, mapping)
         end
-      end
-
-      # map to self.hash_to_arr. The mapping is taken from #type_mapping
-      def hash_to_arr(hash, fields)
-        Creatable.hash_to_arr(hash, fields, @type_mapping.nil? ? {} : @type_mapping)
       end
 
       # extracts the given field from the given hash and optionally applies mapping if given

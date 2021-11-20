@@ -7,6 +7,10 @@ module KodiClient
       module AudioDetailsMedia
         include AudioDetailsBase
 
+        def self.included(base)
+          base.extend(self)
+        end
+
         attr_reader :artist, :artist_id, :display_artist, :musicbrainz_album_artist_id, :original_date, :rating,
                     :release_date, :sort_artist, :title, :user_rating, :votes, :year
 

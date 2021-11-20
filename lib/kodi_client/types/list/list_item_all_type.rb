@@ -8,7 +8,6 @@ module KodiClient
         include ListItemBase
         include Extensions::Comparable
         extend Extensions::Creatable
-        extend ListItemBase
 
         attr_reader :channel, :channel_number, :channel_type, :end_time, :hidden, :locked, :start_time,
                     :sub_channel_number

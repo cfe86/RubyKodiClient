@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |spec|
   spec.name          = 'kodi_client'
-  spec.version       = '0.7.0'
+  spec.version       = '0.7.1'
   spec.authors       = ['Christian Feier']
   spec.email         = ['christian.feier@gmail.com']
 

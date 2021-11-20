@@ -8,7 +8,6 @@ module KodiClient
         include AudioDetailsMedia
         include Extensions::Comparable
         extend Extensions::Creatable
-        extend AudioDetailsMedia
 
         attr_reader :album, :album_artist, :album_artist_id, :album_id, :album_release_type, :bitrate, :bpm, :channels,
                     :comment, :contributors, :disc, :disc_title, :display_composer, :display_conductor,
