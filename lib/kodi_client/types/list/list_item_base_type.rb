@@ -19,14 +19,13 @@ module KodiClient
                     :trailer, :tv_show_id, :type, :unique_id, :votes, :watched_episodes, :writer
 
         def list_item_base_mappings
-          mappings = {
-            'cast' => Extensions::Creatable::CreateMap.new(Video::VideoCast, true),
-            'contributors' => Extensions::Creatable::CreateMap.new(Audio::AudioContributor, true),
-            'resume' => Extensions::Creatable::CreateMap.new(Video::VideoResume),
-            'streamdetails' => Extensions::Creatable::CreateMap.new(Video::StreamDetails),
-            'art' => Extensions::Creatable::CreateMap.new(Media::MediaArtwork)
-          }
-          mappings.merge(video_details_file_mappings).merge(audio_details_media_mappings)
+          [
+            ['cast', Video::VideoCast, true],
+            ['contributors', Audio::AudioContributor, true],
+            ['resume', Video::VideoResume],
+            ['streamdetails', Video::StreamDetails],
+            ['art', Media::MediaArtwork]
+          ] + video_details_file_mappings + audio_details_media_mappings
         end
 
         def list_item_base_by_hash(hash)

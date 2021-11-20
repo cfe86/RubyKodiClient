@@ -8,7 +8,7 @@ module KodiClient
         attr_reader :label
 
         def item_details_base_mappings
-          {}
+          []
         end
 
         def item_details_base_by_hash(hash)

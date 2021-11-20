@@ -15,7 +15,7 @@ module KodiClient
 
         def video_details_item_by_hash(hash)
           video_details_item(*Extensions::Creatable.hash_to_arr(hash, %w[date_added file last_played plot title art
-                                                             play_count fan_art thumbnail label],
+                                                                         play_count fan_art thumbnail label],
                                                                 video_details_item_mappings))
         end
 

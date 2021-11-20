@@ -18,8 +18,7 @@ module KodiClient
                          sort_name source_id style type years_active art date_added genre fan_art thumbnail
                          label]
 
-        type_mapping ['songgenres', Genre, true], ['art', Types::Media::MediaArtwork],
-                     ['roles', AudioArtistRole, true]
+        type_mapping ['songgenres', Genre, true], ['art', Types::Media::MediaArtwork], ['roles', AudioArtistRole, true]
 
         def initialize(artist, artist_id, born, compilation_artist, description, died, disambiguation, disbanded,
                        formed, gender, instrument, is_album_artist, mood, musicbrainz_artist_id, roles, song_genres,

@@ -26,9 +26,8 @@ module KodiClient
                          fan_art thumbnail label artist artist_id display_artist musicbrainz_album_artist_id
                          rating sort_artist user_rating year genre]
 
-        def self.lazy_type_mapping
-          list_item_base_mappings
-        end
+        type_mapping(*list_item_base_mappings)
+
 
         def initialize(file_type, last_modified, mime_type, size,
                        album, album_artist, album_artist_id, album_id, album_release_type, album_status, bit_rate,

@@ -16,6 +16,8 @@ module KodiClient
                     :musicbrainz_artist_id, :musicbrainz_track_id, :play_count, :sample_rate, :song_id, :source_id,
                     :track
 
+        type_mapping ['contributors', Types::Audio::AudioContributor, true], *audio_details_media_mappings
+
         fields_to_map %w[album album_artist album_artist_id album_id album_release_type bitrate bpm channels
                          comment contributors disc disc_title display_composer display_conductor display_lyricist
                          display_orchestra duration file genre_id last_played lyrics mood musicbrainz_artist_id
@@ -23,11 +25,6 @@ module KodiClient
                          artist artist_id display_artist musicbrainz_album_artist_id original_date
                          rating release_date sort_artist title user_rating votes year
                          art date_added genre fan_art thumbnail label]
-
-        def self.lazy_type_mapping
-          mapping = { 'contributors' => Extensions::Creatable::CreateMap.new(Types::Audio::AudioContributor, true) }
-          mapping.merge(audio_details_media_mappings)
-        end
 
         def initialize(album, album_artist, album_artist_id, album_id, album_release_type, bitrate, bpm, channels,
                        comment, contributors, disc, disc_title, display_composer, display_conductor, display_lyricist,

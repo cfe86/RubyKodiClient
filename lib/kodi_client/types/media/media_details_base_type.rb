@@ -14,7 +14,8 @@ module KodiClient
         end
 
         def media_details_base_by_hash(hash)
-          media_details_base(*Extensions::Creatable.hash_to_arr(hash, %w[fan_art thumbnail label]), media_details_base_mappings)
+          media_details_base(*Extensions::Creatable.hash_to_arr(hash, %w[fan_art thumbnail label]),
+                             media_details_base_mappings)
         end
 
         def media_details_base(fan_art, thumbnail, label)

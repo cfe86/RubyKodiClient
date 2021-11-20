@@ -10,17 +10,17 @@ module KodiClient
         attr_reader :director, :resume, :runtime, :stream_details
 
         def video_details_file_mappings
-          mappings = {
-            'resume' => Extensions::Creatable::CreateMap.new(VideoResume),
-            'streamdetails' => Extensions::Creatable::CreateMap.new(StreamDetails)
-          }
-          mappings.merge(video_details_item_mappings)
+          [
+            ['resume', VideoResume],
+            ['streamdetails', StreamDetails]
+          ] + video_details_item_mappings
         end
 
         def video_details_file_by_hash(hash)
-          video_details_file(*Extensions::Creatable.hash_to_arr(hash, %w[director resume runtime stream_details date_added
-                                                             file last_played plot title art play_count fan_art
-                                                             thumbnail label], video_details_file_mappings))
+          video_details_file(*Extensions::Creatable.hash_to_arr(hash, %w[director resume runtime stream_details 
+                                                                         date_added file last_played plot title art 
+                                                                         play_count fan_art thumbnail label],
+                                                                video_details_file_mappings))
         end
 
         def video_details_file(director, resume, runtime, stream_details, date_added, file, last_played, plot, title,

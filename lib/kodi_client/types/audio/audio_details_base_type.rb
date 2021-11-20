@@ -10,8 +10,7 @@ module KodiClient
         attr_reader :art, :date_added, :genre
 
         def audio_details_base_mappings
-          mappings = { 'art' => Extensions::Creatable::CreateMap.new(Types::Media::MediaArtwork) }
-          mappings.merge(media_details_base_mappings)
+          [['art', Types::Media::MediaArtwork]] + media_details_base_mappings
         end
 
         def audio_details_base_by_hash(hash)

@@ -20,13 +20,11 @@ module KodiClient
         return if args.nil?
 
         @type_mapping = {}
-        args.map { |it| @type_mapping[it[0]] = Creatable::CreateMap.new(it[1], it[2].nil? ? false : it[2]) }
+        args.map { |it| @type_mapping[it[0]] = Creatable.arr_to_mapping(it) }
       end
 
-      # if @type_mapping is nil, it tries to fetch the mapping from here instead
-      # @return [Hash<String, CreateMap>] an hash containing all the mappings
-      def lazy_type_mapping
-        {}
+      def self.arr_to_mapping(arr)
+        Creatable::CreateMap.new(arr[1], arr[2].nil? ? false : arr[2])
       end
 
       # expects the given hash is a list of hashes and calls #create on each element
@@ -51,7 +49,7 @@ module KodiClient
           fields = @fields_to_map
         end
 
-        mapping = @type_mapping.nil? ? lazy_type_mapping : @type_mapping
+        mapping = @type_mapping.nil? ? {} : @type_mapping
         args = fields.map do |it|
           field = it.to_s.gsub('_', '')
           Creatable.extract_field_from_hash(field, hash, mapping)
@@ -65,10 +63,12 @@ module KodiClient
       # used
       # @param hash [Hash] the given hash
       # @param fields [Array<String>] the fields to extract
-      # @param mapping [Hash<String, CreateMap>] optional mapping if a field contains a complex type
+      # @param mapping [Hash<String>, Array<Array<String>>] optional mapping if a field contains a complex type
       # @return [Array] an array containing the values of hash[field] in the given field order
       def self.hash_to_arr(hash, fields, mapping = {})
         return nil if hash.nil?
+
+        mapping = arr_to_mapping(mapping) unless mapping.is_a?(Hash)
 
         fields.map do |it|
           field = it.to_s.gsub('_', '')
