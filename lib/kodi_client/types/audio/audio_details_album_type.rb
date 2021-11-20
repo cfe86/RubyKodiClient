@@ -4,7 +4,7 @@ module KodiClient
   module Types
     module Audio
       # Audio.Details.Album https://kodi.wiki/view/JSON-RPC_API/v12#Audio.Details.Album
-      class DetailsAlbum
+      class AudioDetailsAlbum
         include AudioDetailsMedia
         include Extensions::Comparable
         extend Extensions::Creatable

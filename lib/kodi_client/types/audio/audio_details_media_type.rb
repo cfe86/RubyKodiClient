@@ -16,9 +16,10 @@ module KodiClient
 
         def audio_details_media_by_hash(hash)
           audio_details_media(*Extensions::Creatable.hash_to_arr(hash, %w[artist artist_id display_artist
-                                                              musicbrainz_album_artist_id original_date rating
-                                                              release_date sort_artist title user_rating votes year art
-                                                              date_added genre fan_art thumbnail label],
+                                                                          musicbrainz_album_artist_id original_date
+                                                                          rating release_date sort_artist title
+                                                                          user_rating votes year art date_added
+                                                                          genre fan_art thumbnail label],
                                                                  audio_details_base_mappings))
         end
 

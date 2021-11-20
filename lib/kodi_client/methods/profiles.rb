@@ -18,14 +18,12 @@ module KodiClient
       end
 
       def get_profiles(properties = Types::Profiles::FieldsProfile.all_properties,
-                       limit = Types::List::ListLimits.new(0, 50),
+                       limits = Types::List::ListLimits.new(0, 50),
                        sort = Types::List::ListSort.new, kodi_id = 1)
         request = KodiRequest.new(kodi_id, GET_PROFILES,
                                   { 'properties' => properties,
-                                    'limits' => { 'start' => limit.list_start, 'end' => limit.list_end },
-                                    'sort' => { 'ignorearticle' => sort.ignore_article, 'method' => sort.method,
-                                                'order' => sort.order,
-                                                'useartistsortname' => sort.use_artist_sort_name } })
+                                    'limits' => limits.to_h,
+                                    'sort' => sort.to_h })
         json = invoke_api(request)
         result = Types::Profiles::GetProfilesReturned.create(json['result'])
         json['result'] = result

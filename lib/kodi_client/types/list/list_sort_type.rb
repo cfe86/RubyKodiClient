@@ -16,6 +16,12 @@ module KodiClient
           @order = sort_order
           @use_artist_sort_name = use_artist_sort_name
         end
+
+        def to_h
+          { 'ignorearticle' => @ignore_article, 'method' => @method,
+            'order' => @order,
+            'useartistsortname' => @use_artist_sort_name }
+        end
       end
     end
   end

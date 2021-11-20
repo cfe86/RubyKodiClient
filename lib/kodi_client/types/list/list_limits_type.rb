@@ -13,6 +13,10 @@ module KodiClient
           @list_start = list_start
           @list_end = list_end
         end
+
+        def to_h
+          { 'start' => @list_start, 'end' => @list_end }
+        end
       end
     end
   end

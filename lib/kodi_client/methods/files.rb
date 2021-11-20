@@ -20,10 +20,8 @@ module KodiClient
                                     'directory' => directory,
                                     'media' => media,
                                     'properties' => properties,
-                                    'sort' => { 'ignorearticle' => sort.ignore_article, 'method' => sort.method,
-                                                'order' => sort.order,
-                                                'useartistsortname' => sort.use_artist_sort_name },
-                                    'limits' => { 'start' => limits.list_start, 'end' => limits.list_end }
+                                    'sort' => sort.to_h,
+                                    'limits' => limits.to_h
                                   })
         json = invoke_api(request)
         result = KodiClient::Types::Files::GetDirectoryReturned.create(json['result'])
@@ -51,10 +49,8 @@ module KodiClient
         request = KodiRequest.new(kodi_id, GET_SOURCES,
                                   {
                                     'media' => media,
-                                    'sort' => { 'ignorearticle' => sort.ignore_article, 'method' => sort.method,
-                                                'order' => sort.order,
-                                                'useartistsortname' => sort.use_artist_sort_name },
-                                    'limits' => { 'start' => limits.list_start, 'end' => limits.list_end }
+                                    'sort' => sort.to_h,
+                                    'limits' => limits.to_h
                                   })
         json = invoke_api(request)
         result = KodiClient::Types::Files::GetSourcesReturned.create(json['result'])

@@ -39,7 +39,7 @@ module KodiClient
       # creates a Creatable using the provided hash and the attr_reader fields, or if given #fields_to_map instead
       # The parameters will be passed to initialize the object in the same order as they are passed to attr_reader
       # or #fields_to_map
-      # @param hash [Hash] the given hash to convert to an object
+      # @param hash [Hash, nil] the given hash to convert to an object
       # @return the created object, or nil if the given hash is nil
       def create(hash)
         return nil if hash.nil?
@@ -83,7 +83,7 @@ module KodiClient
 
       # extracts the given field from the given hash and optionally applies mapping if given
       # @param field [String] the field name
-      # @param hash [Hash] the hash where to extract the field from
+      # @param hash [Hash, nil] the hash where to extract the field from
       # @param mapping [Hash<String, CreateMap>] optional mapping for complex types
       # @return the extracted object or nil, if the hash is empty, or [] if the expected value was a list and was nil
       def self.extract_field_from_hash(field, hash, mapping)

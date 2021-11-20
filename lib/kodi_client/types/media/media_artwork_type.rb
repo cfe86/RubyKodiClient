@@ -16,6 +16,10 @@ module KodiClient
           @poster = poster
           @thumb = thumb
         end
+
+        def to_h
+          { 'banner' => @banner, 'fanart' => @fan_art, 'poster' => @poster, 'thumb' => @thumb }
+        end
       end
     end
   end

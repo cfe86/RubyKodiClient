@@ -7,7 +7,6 @@ module KodiClient
       module AudioFieldsAlbum
         extend Extensions::Iterable
 
-        #album id
         ALBUM_DURATION = 'albumduration'
         ALBUM_LABEL = 'albumlabel'
         ALBUM_STATUS = 'albumstatus'

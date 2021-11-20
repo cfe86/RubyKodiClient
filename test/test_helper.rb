@@ -28,11 +28,11 @@ module KodiClient
       KodiClient::KodiResponse.new({ 'id' => id, 'jsonrpc' => '2.0', 'result' => result, 'error' => error })
     end
 
-    def run_test(kodi_module, post, response, method)
+    def run_test(kodi_method, post, response, method)
       HTTP::Client.stub :new, MockHttpClient.new(post, response) do
         client = KodiClient.connect('127.0.0.1', 8080)
         client.apply_options_to_methods(KodiClient::KodiOptions.new)
-        mod = client.instance_variable_get("@#{kodi_module}")
+        mod = client.instance_variable_get("@#{kodi_method}")
         method.call(mod)
       end
     end

@@ -4,19 +4,20 @@ module KodiClient
   module Types
     module Audio
       # return type for AudioLibrary.GetAlbums
-      class GetAlbumsReturned
+      class GetArtistsReturned
         include Extensions::Comparable
         extend Extensions::Creatable
 
-        attr_reader :albums, :limits
+        attr_reader :artists, :limits
 
-        type_mapping ['albums', AudioDetailsAlbum, true], ['limits', List::ListLimitsReturned]
+        type_mapping ['artists', AudioDetailsArtist, true], ['limits', List::ListLimitsReturned]
 
-        def initialize(albums, limits)
-          @albums = albums
+        def initialize(artists, limits)
+          @artists = artists
           @limits = limits
         end
       end
     end
   end
 end
+

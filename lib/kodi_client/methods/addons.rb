@@ -13,14 +13,14 @@ module KodiClient
       def get_addons(type = Types::Addons::AddonTypes::UNKNOWN,
                      content = Types::Addons::AddonContent::UNKNOWN,
                      enabled = nil, properties = [],
-                     limit = Types::List::ListLimits.new(0, 50), installed = nil, kodi_id = 1)
+                     limits = Types::List::ListLimits.new(0, 50), installed = nil, kodi_id = 1)
         request = KodiRequest.new(kodi_id, GET_ADDONS,
                                   {
                                     'type' => type,
                                     'content' => content,
                                     'enabled' => enabled.nil? || !enabled ? 'all' : 'enabled',
                                     'properties' => properties,
-                                    'limits' => { 'start' => limit.list_start, 'end' => limit.list_end },
+                                    'limits' => limits.to_h,
                                     'installed' => installed.nil? || !installed ? 'all' : 'installed'
                                   })
         json = invoke_api(request)

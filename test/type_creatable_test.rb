@@ -11,7 +11,7 @@ module KodiClient
       def test_details_album
         art = Media::MediaArtwork.new('banner', 'art', 'poster', 'thumb')
         song_genres = [Audio::Genre.new('genre_id', 'title')]
-        album = Audio::DetailsAlbum.new(
+        album = Audio::AudioDetailsAlbum.new(
           'album_duration', 'album_id', 'album_label', 'album_status',
           art, ['artist'], ['artist_id'], false, 'date_added', 'date_modified', 'date_new',
           'description', 'display_artist', 'fan_art', ['genre'], false,
@@ -38,7 +38,7 @@ module KodiClient
                  'thumbnail' => 'thumbnail', 'title' => 'title', 'totaldiscs' => 1, 'type' => 'type', 'userrating' => 0,
                  'votes' => 0, 'year' => 2000 }
 
-        album_hash = Audio::DetailsAlbum.create(hash)
+        album_hash = Audio::AudioDetailsAlbum.create(hash)
 
         assert_equal(album, album_hash)
       end
