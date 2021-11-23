@@ -106,6 +106,7 @@ require 'kodi_client/types/video/video_details_item_type'
 require 'kodi_client/types/video/video_details_file_type'
 require 'kodi_client/types/video/video_resume_type'
 require 'kodi_client/types/video/stream_details_type'
+require 'kodi_client/types/video/video_content_type_type'
 
 require 'kodi_client/types/list/list_item_base_type'
 require 'kodi_client/types/list/list_item_all_type'
@@ -147,6 +148,7 @@ require 'kodi_client/methods/input'
 require 'kodi_client/methods/player'
 require 'kodi_client/methods/profiles'
 require 'kodi_client/methods/system'
+require 'kodi_client/methods/video_library'
 
 # client for Kodi rest api https://kodi.wiki/view/JSON-RPC_API/v12
 module KodiClient
@@ -169,6 +171,7 @@ module KodiClient
       @player = Methods::Player.new
       @profiles = Methods::Profiles.new
       @system = Methods::System.new
+      @video_library = Methods::System.new
     end
 
     def apply_options_to_methods(options)
