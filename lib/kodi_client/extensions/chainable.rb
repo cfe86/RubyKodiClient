@@ -13,7 +13,8 @@ module KodiClient
       # @raise [ArgumentError] thrown if ip or port is nil
       # @return [Client] the created client
       def connect(ip, port)
-        throw ArgumentError('ip or port can\'t be nil.') if ip.nil? || port.nil?
+        raise ArgumentError, 'ip or port can\'t be nil.' if ip.nil? || port.nil?
+
         @client = KodiClient::Client.new
         merge_options(->(options) { options.with_connection(ip, port) })
       end
@@ -23,7 +24,8 @@ module KodiClient
       # @param password [String] the password
       # @return [Client] the existing, or if not existed, a new created client
       def auth(username, password)
-        throw ArgumentError('username or password can\'t be nil.') if username.nil? || password.nil?
+        raise ArgumentError, 'username or password can\'t be nil.' if username.nil? || password.nil?
+
         merge_options(->(options) { options.with_auth(username, password) })
       end
 
